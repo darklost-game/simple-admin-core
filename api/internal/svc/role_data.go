@@ -2,21 +2,18 @@ package svc
 
 import (
 	"context"
+	"strings"
+
 	"github.com/suyuan32/simple-admin-common/enum/common"
 	"github.com/suyuan32/simple-admin-common/i18n"
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"github.com/zeromicro/go-zero/core/logx"
-	"strings"
 )
 
-func (l *ServiceContext) LoadBanRoleData() error {
+func (l *ServiceContext) LoadBanRoleData(msg string) (banRoleData map[string]bool, err error) {
 	if !l.Config.CoreRpc.Enabled {
-		return errorx.NewCodeInternalError(i18n.ServiceUnavailable)
-	}
-
-	if l.BanRoleData == nil {
-		l.BanRoleData = make(map[string]bool)
+		return banRoleData, errorx.NewCodeInternalError(i18n.ServiceUnavailable)
 	}
 
 	roleData, err := l.CoreRpc.GetRoleList(context.Background(), &core.RoleListReq{
@@ -26,11 +23,13 @@ func (l *ServiceContext) LoadBanRoleData() error {
 
 	if err != nil {
 		if strings.Contains(err.Error(), i18n.DatabaseError) {
-			return nil
+			return banRoleData, errorx.NewCodeUnavailableError(i18n.DatabaseError)
 		}
 		logx.Error("failed to load role data, please check if initialize the database")
-		return errorx.NewCodeInternalError("failed to load role data")
+		return banRoleData, errorx.NewCodeInternalError("failed to load role data")
 	}
+
+	banRoleData = make(map[string]bool)
 
 	var state bool
 	for _, v := range roleData.Data {
@@ -40,8 +39,8 @@ func (l *ServiceContext) LoadBanRoleData() error {
 			state = true
 		}
 
-		l.BanRoleData[*v.Code] = state
+		banRoleData[*v.Code] = state
 	}
 
-	return nil
+	return banRoleData, nil
 }

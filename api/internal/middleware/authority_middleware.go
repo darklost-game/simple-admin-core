@@ -3,10 +3,12 @@ package middleware
 import (
 	"context"
 	"errors"
-	"github.com/redis/go-redis/v9"
-	"github.com/suyuan32/simple-admin-common/config"
 	"net/http"
 	"strings"
+
+	"github.com/redis/go-redis/v9"
+	"github.com/suyuan32/simple-admin-common/config"
+	"github.com/suyuan32/simple-admin-core/api/internal/utils/banrole"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/suyuan32/simple-admin-common/enum/errorcode"
@@ -19,18 +21,18 @@ import (
 )
 
 type AuthorityMiddleware struct {
-	Cbn         *casbin.Enforcer
-	Rds         redis.UniversalClient
-	Trans       *i18n.Translator
-	BanRoleData map[string]bool
+	Cbn     *casbin.Enforcer
+	Rds     redis.UniversalClient
+	Trans   *i18n.Translator
+	BanRole *banrole.BanRoleConf
 }
 
-func NewAuthorityMiddleware(cbn *casbin.Enforcer, rds redis.UniversalClient, trans *i18n.Translator, banRoleData map[string]bool) *AuthorityMiddleware {
+func NewAuthorityMiddleware(cbn *casbin.Enforcer, rds redis.UniversalClient, trans *i18n.Translator, banRole *banrole.BanRoleConf) *AuthorityMiddleware {
 	return &AuthorityMiddleware{
-		Cbn:         cbn,
-		Rds:         rds,
-		Trans:       trans,
-		BanRoleData: banRoleData,
+		Cbn:     cbn,
+		Rds:     rds,
+		Trans:   trans,
+		BanRole: banRole,
 	}
 }
 
@@ -45,8 +47,9 @@ func (m *AuthorityMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 
 		// check the role status
 		var isRoleNormal bool
+		banRoleData := m.BanRole.BanRoleData
 		for _, v := range roleIds {
-			if !m.BanRoleData[v] {
+			if !banRoleData[v] {
 				isRoleNormal = true
 			}
 		}

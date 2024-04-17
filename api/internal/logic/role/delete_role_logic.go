@@ -32,7 +32,7 @@ func (l *DeleteRoleLogic) DeleteRole(req *types.IDsReq) (resp *types.BaseMsgResp
 		return nil, err
 	}
 
-	err = l.svcCtx.LoadBanRoleData()
+	err = l.svcCtx.BanRoleConf.Watcher.Update()
 	if err != nil {
 		return nil, err
 	}

@@ -38,7 +38,7 @@ func (l *CreateRoleLogic) CreateRole(req *types.RoleInfo) (resp *types.BaseMsgRe
 		return nil, err
 	}
 
-	err = l.svcCtx.LoadBanRoleData()
+	err = l.svcCtx.BanRoleConf.Watcher.Update()
 	if err != nil {
 		return nil, err
 	}

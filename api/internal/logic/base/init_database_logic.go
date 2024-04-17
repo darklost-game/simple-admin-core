@@ -73,7 +73,7 @@ func (l *InitDatabaseLogic) InitDatabase() (resp *types.BaseMsgResp, err error) 
 	}
 
 	// load role ban data
-	err = l.svcCtx.LoadBanRoleData()
+	err = l.svcCtx.BanRoleConf.Watcher.Update()
 	if err != nil {
 		return nil, err
 	}

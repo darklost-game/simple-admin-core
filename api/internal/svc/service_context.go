@@ -7,6 +7,8 @@ import (
 	"github.com/suyuan32/simple-admin-common/utils/captcha"
 	i18n2 "github.com/suyuan32/simple-admin-core/api/internal/i18n"
 	"github.com/suyuan32/simple-admin-core/api/internal/middleware"
+	"github.com/suyuan32/simple-admin-core/api/internal/utils/banrole"
+	"github.com/suyuan32/simple-admin-core/api/internal/utils/banrolewatcher"
 	"github.com/suyuan32/simple-admin-job/jobclient"
 	"github.com/suyuan32/simple-admin-message-center/mcmsclient"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -29,7 +31,7 @@ type ServiceContext struct {
 	Casbin      *casbin.Enforcer
 	Trans       *i18n.Translator
 	Captcha     *base64Captcha.Captcha
-	BanRoleData map[string]bool // ban role means the role status is not normal
+	BanRoleConf *banrole.BanRoleConf
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -56,10 +58,19 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Trans:   trans,
 	}
 
-	err := svc.LoadBanRoleData()
+	//初始化管理平台banrole
+	svc.BanRoleConf = banrole.NewBanRoleConf(c.RedisConf, "/ban_role/admin", svc.LoadBanRoleData)
+	msg := &banrolewatcher.MSG{
+		Method: banrolewatcher.Update,
+		ID:     svc.BanRoleConf.Watcher.GetWatcherOptions().LocalID,
+	}
+	msgBytes, err := msg.MarshalBinary()
+	logx.Must(err)
+	msgStr := string(msgBytes)
+	_, err = svc.LoadBanRoleData(msgStr)
 	logx.Must(err)
 
-	svc.Authority = middleware.NewAuthorityMiddleware(cbn, rds, trans, svc.BanRoleData).Handle
+	svc.Authority = middleware.NewAuthorityMiddleware(cbn, rds, trans, svc.BanRoleConf).Handle
 
 	return svc
 }

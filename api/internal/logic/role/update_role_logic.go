@@ -2,6 +2,7 @@ package role
 
 import (
 	"context"
+
 	"github.com/suyuan32/simple-admin-core/api/internal/svc"
 	"github.com/suyuan32/simple-admin-core/api/internal/types"
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
@@ -37,7 +38,7 @@ func (l *UpdateRoleLogic) UpdateRole(req *types.RoleInfo) (resp *types.BaseMsgRe
 		return nil, err
 	}
 
-	err = l.svcCtx.LoadBanRoleData()
+	err = l.svcCtx.BanRoleConf.Watcher.Update()
 	if err != nil {
 		return nil, err
 	}
