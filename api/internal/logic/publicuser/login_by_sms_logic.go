@@ -2,6 +2,9 @@ package publicuser
 
 import (
 	"context"
+	"strings"
+	"time"
+
 	"github.com/suyuan32/simple-admin-common/config"
 	"github.com/suyuan32/simple-admin-common/enum/common"
 	"github.com/suyuan32/simple-admin-common/i18n"
@@ -9,8 +12,6 @@ import (
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
 	"github.com/zeromicro/go-zero/core/errorx"
-	"strings"
-	"time"
 
 	"github.com/suyuan32/simple-admin-core/api/internal/svc"
 	"github.com/suyuan32/simple-admin-core/api/internal/types"
@@ -58,9 +59,15 @@ func (l *LoginBySmsLogic) LoginBySms(req *types.LoginBySmsReq) (resp *types.Logi
 			return nil, errorx.NewCodeInvalidArgumentError("login.userNotExist")
 		}
 
-		token, err := jwt.NewJwtToken(l.svcCtx.Config.Auth.AccessSecret, time.Now().Unix(),
-			l.svcCtx.Config.Auth.AccessExpire, jwt.WithOption("userId", userData.Data[0].Id), jwt.WithOption("roleId",
-				strings.Join(userData.Data[0].RoleCodes, ",")), jwt.WithOption("deptId", userData.Data[0].DepartmentId))
+		token, err := jwt.NewJwtToken(
+			l.svcCtx.Config.Auth.AccessSecret,
+			time.Now().Unix(),
+			l.svcCtx.Config.Auth.AccessExpire,
+			jwt.WithOption("userId", userData.Data[0].Id),
+			jwt.WithOption("roleId", strings.Join(userData.Data[0].RoleCodes, ",")),
+			jwt.WithOption("deptId", userData.Data[0].DepartmentId),
+			jwt.WithOption("platform", "core"), //平台  管理平台
+		)
 		if err != nil {
 			return nil, err
 		}

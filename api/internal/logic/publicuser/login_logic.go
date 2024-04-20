@@ -2,10 +2,11 @@ package publicuser
 
 import (
 	"context"
-	"github.com/suyuan32/simple-admin-common/config"
-	"github.com/suyuan32/simple-admin-common/enum/common"
 	"strings"
 	"time"
+
+	"github.com/suyuan32/simple-admin-common/config"
+	"github.com/suyuan32/simple-admin-common/enum/common"
 
 	"github.com/suyuan32/simple-admin-common/utils/encrypt"
 	"github.com/suyuan32/simple-admin-common/utils/jwt"
@@ -51,9 +52,15 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 			return nil, errorx.NewCodeInvalidArgumentError("login.wrongUsernameOrPassword")
 		}
 
-		token, err := jwt.NewJwtToken(l.svcCtx.Config.Auth.AccessSecret, time.Now().Unix(),
-			l.svcCtx.Config.Auth.AccessExpire, jwt.WithOption("userId", user.Id), jwt.WithOption("roleId",
-				strings.Join(user.RoleCodes, ",")), jwt.WithOption("deptId", user.DepartmentId))
+		token, err := jwt.NewJwtToken(
+			l.svcCtx.Config.Auth.AccessSecret,
+			time.Now().Unix(),
+			l.svcCtx.Config.Auth.AccessExpire,
+			jwt.WithOption("userId", user.Id),
+			jwt.WithOption("roleId", strings.Join(user.RoleCodes, ",")),
+			jwt.WithOption("deptId", user.DepartmentId),
+			jwt.WithOption("platform", "core"), //平台  管理平台
+		)
 		if err != nil {
 			return nil, err
 		}
