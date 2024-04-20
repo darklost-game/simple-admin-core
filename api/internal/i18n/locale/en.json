@@ -226,7 +226,10 @@
 		"messageCenterManagement": "Message Center",
 		"storageProviderManagement": "Storage Provider",
 		"cloudFileManagement": "Cloud File",
-		"cloudFileTagManagement": "Cloud File's Tag"
+		"cloudFileTagManagement": "Cloud File's Tag",
+		"agentManagement": "Agent Management",
+		"agentUserManagement": "Agent User Management",
+		"agentTokenManagement": "Agent Token Management"
 	},
 	"login": {
 		"loginSuccessTitle": "Login successful",

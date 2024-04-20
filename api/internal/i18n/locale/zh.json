@@ -231,7 +231,10 @@
 		"messageCenterManagement": "消息中心管理",
 		"storageProviderManagement": "云存储服务商管理",
 		"cloudFileManagement": "云文件管理",
-		"cloudFileTagManagement": "云文件标签管理"
+		"cloudFileTagManagement": "云文件标签管理",
+		"agentManagement": "代理管理",
+		"agentUserManagement": "代理用户管理",
+		"agentTokenManagement": "代理令牌管理"
 	},
 	"login": {
 		"loginSuccessTitle": "登录成功",
