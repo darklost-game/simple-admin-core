@@ -23,7 +23,8 @@ func (l *ServiceContext) LoadBanRoleData(msg string) (banRoleData map[string]boo
 
 	if err != nil {
 		if strings.Contains(err.Error(), i18n.DatabaseError) {
-			return banRoleData, errorx.NewCodeUnavailableError(i18n.DatabaseError)
+			logx.Info("failed to load role data, please check if initialize the database")
+			return banRoleData, nil
 		}
 		logx.Error("failed to load role data, please check if initialize the database")
 		return banRoleData, errorx.NewCodeInternalError("failed to load role data")
