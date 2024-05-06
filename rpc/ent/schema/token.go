@@ -25,6 +25,7 @@ func (Token) Fields() []ent.Field {
 			Default("unknown").
 			Annotations(entsql.WithComments(true)),
 		field.String("token").
+			MaxLen(511).
 			Comment("Token string | Token 字符串").
 			Annotations(entsql.WithComments(true)),
 		field.String("source").

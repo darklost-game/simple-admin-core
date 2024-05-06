@@ -173,7 +173,20 @@ func (tu *TokenUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (tu *TokenUpdate) check() error {
+	if v, ok := tu.mutation.Token(); ok {
+		if err := token.TokenValidator(v); err != nil {
+			return &ValidationError{Name: "token", err: fmt.Errorf(`ent: validator failed for field "Token.token": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := tu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(token.Table, token.Columns, sqlgraph.NewFieldSpec(token.FieldID, field.TypeUUID))
 	if ps := tu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -386,7 +399,20 @@ func (tuo *TokenUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (tuo *TokenUpdateOne) check() error {
+	if v, ok := tuo.mutation.Token(); ok {
+		if err := token.TokenValidator(v); err != nil {
+			return &ValidationError{Name: "token", err: fmt.Errorf(`ent: validator failed for field "Token.token": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (tuo *TokenUpdateOne) sqlSave(ctx context.Context) (_node *Token, err error) {
+	if err := tuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(token.Table, token.Columns, sqlgraph.NewFieldSpec(token.FieldID, field.TypeUUID))
 	id, ok := tuo.mutation.ID()
 	if !ok {

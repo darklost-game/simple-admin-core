@@ -68,6 +68,8 @@ var (
 	DefaultStatus uint8
 	// DefaultUsername holds the default value on creation for the "username" field.
 	DefaultUsername string
+	// TokenValidator is a validator for the "token" field. It is called by the builders before save.
+	TokenValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

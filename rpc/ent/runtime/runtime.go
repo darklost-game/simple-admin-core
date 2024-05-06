@@ -314,6 +314,10 @@ func init() {
 	tokenDescUsername := tokenFields[1].Descriptor()
 	// token.DefaultUsername holds the default value on creation for the username field.
 	token.DefaultUsername = tokenDescUsername.Default.(string)
+	// tokenDescToken is the schema descriptor for token field.
+	tokenDescToken := tokenFields[2].Descriptor()
+	// token.TokenValidator is a validator for the "token" field. It is called by the builders before save.
+	token.TokenValidator = tokenDescToken.Validators[0].(func(string) error)
 	// tokenDescID is the schema descriptor for id field.
 	tokenDescID := tokenMixinFields0[0].Descriptor()
 	// token.DefaultID holds the default value on creation for the id field.

@@ -189,6 +189,11 @@ func (tc *TokenCreate) check() error {
 	if _, ok := tc.mutation.Token(); !ok {
 		return &ValidationError{Name: "token", err: errors.New(`ent: missing required field "Token.token"`)}
 	}
+	if v, ok := tc.mutation.Token(); ok {
+		if err := token.TokenValidator(v); err != nil {
+			return &ValidationError{Name: "token", err: fmt.Errorf(`ent: validator failed for field "Token.token": %w`, err)}
+		}
+	}
 	if _, ok := tc.mutation.Source(); !ok {
 		return &ValidationError{Name: "source", err: errors.New(`ent: missing required field "Token.source"`)}
 	}
