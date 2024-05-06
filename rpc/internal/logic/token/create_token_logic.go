@@ -2,10 +2,12 @@ package token
 
 import (
 	"context"
+	"time"
 
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
 	"github.com/suyuan32/simple-admin-common/utils/uuidx"
 
+	"github.com/suyuan32/simple-admin-core/rpc/ent/token"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/svc"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/utils/dberrorhandler"
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
@@ -30,6 +32,11 @@ func NewCreateTokenLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Creat
 }
 
 func (l *CreateTokenLogic) CreateToken(in *core.TokenInfo) (*core.BaseUUIDResp, error) {
+	//清理DB中过期的token
+	_, err := l.svcCtx.DB.Token.Delete().Where(token.ExpiredAtLT(time.Now())).Exec(l.ctx)
+	if err != nil {
+		return nil, err
+	}
 	result, err := l.svcCtx.DB.Token.Create().
 		SetNotNilStatus(pointy.GetStatusPointer(in.Status)).
 		SetNotNilUUID(uuidx.ParseUUIDStringToPointer(in.Uuid)).
