@@ -383,6 +383,8 @@ type UserBaseIDInfo struct {
 	Description *string `json:"desc"`
 	// User's Role Name | 用户的角色名称
 	RoleName []string `json:"roleName"`
+	// User's Role Value | 用户的角色值
+	Roles []string `json:"roles"`
 }
 
 // The permission code for front end permission control | 权限码： 用于前端权限控制

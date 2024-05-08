@@ -43,6 +43,7 @@ func (l *GetUserInfoLogic) GetUserInfo() (resp *types.UserBaseIDInfoResp, err er
 			HomePath:    user.HomePath,
 			Description: user.Description,
 			RoleName:    TransRoleName(l.svcCtx, l.ctx, user.RoleName),
+			Roles:       user.RoleCodes,
 		},
 	}, nil
 }
