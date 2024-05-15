@@ -13,6 +13,8 @@ import (
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/department"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/loglogin"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/logoperation"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/predicate"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/role"
@@ -22,13 +24,15 @@ import (
 // UserQuery is the builder for querying User entities.
 type UserQuery struct {
 	config
-	ctx             *QueryContext
-	order           []user.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.User
-	withDepartments *DepartmentQuery
-	withPositions   *PositionQuery
-	withRoles       *RoleQuery
+	ctx               *QueryContext
+	order             []user.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.User
+	withDepartments   *DepartmentQuery
+	withPositions     *PositionQuery
+	withRoles         *RoleQuery
+	withLogLogins     *LogLoginQuery
+	withLogOperations *LogOperationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -124,6 +128,50 @@ func (uq *UserQuery) QueryRoles() *RoleQuery {
 			sqlgraph.From(user.Table, user.FieldID, selector),
 			sqlgraph.To(role.Table, role.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.RolesTable, user.RolesPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLogLogins chains the current query on the "log_logins" edge.
+func (uq *UserQuery) QueryLogLogins() *LogLoginQuery {
+	query := (&LogLoginClient{config: uq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(loglogin.Table, loglogin.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.LogLoginsTable, user.LogLoginsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLogOperations chains the current query on the "log_operations" edge.
+func (uq *UserQuery) QueryLogOperations() *LogOperationQuery {
+	query := (&LogOperationClient{config: uq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(logoperation.Table, logoperation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.LogOperationsTable, user.LogOperationsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -318,14 +366,16 @@ func (uq *UserQuery) Clone() *UserQuery {
 		return nil
 	}
 	return &UserQuery{
-		config:          uq.config,
-		ctx:             uq.ctx.Clone(),
-		order:           append([]user.OrderOption{}, uq.order...),
-		inters:          append([]Interceptor{}, uq.inters...),
-		predicates:      append([]predicate.User{}, uq.predicates...),
-		withDepartments: uq.withDepartments.Clone(),
-		withPositions:   uq.withPositions.Clone(),
-		withRoles:       uq.withRoles.Clone(),
+		config:            uq.config,
+		ctx:               uq.ctx.Clone(),
+		order:             append([]user.OrderOption{}, uq.order...),
+		inters:            append([]Interceptor{}, uq.inters...),
+		predicates:        append([]predicate.User{}, uq.predicates...),
+		withDepartments:   uq.withDepartments.Clone(),
+		withPositions:     uq.withPositions.Clone(),
+		withRoles:         uq.withRoles.Clone(),
+		withLogLogins:     uq.withLogLogins.Clone(),
+		withLogOperations: uq.withLogOperations.Clone(),
 		// clone intermediate query.
 		sql:  uq.sql.Clone(),
 		path: uq.path,
@@ -362,6 +412,28 @@ func (uq *UserQuery) WithRoles(opts ...func(*RoleQuery)) *UserQuery {
 		opt(query)
 	}
 	uq.withRoles = query
+	return uq
+}
+
+// WithLogLogins tells the query-builder to eager-load the nodes that are connected to
+// the "log_logins" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithLogLogins(opts ...func(*LogLoginQuery)) *UserQuery {
+	query := (&LogLoginClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withLogLogins = query
+	return uq
+}
+
+// WithLogOperations tells the query-builder to eager-load the nodes that are connected to
+// the "log_operations" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithLogOperations(opts ...func(*LogOperationQuery)) *UserQuery {
+	query := (&LogOperationClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withLogOperations = query
 	return uq
 }
 
@@ -443,10 +515,12 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = uq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
 			uq.withDepartments != nil,
 			uq.withPositions != nil,
 			uq.withRoles != nil,
+			uq.withLogLogins != nil,
+			uq.withLogOperations != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -484,6 +558,20 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := uq.loadRoles(ctx, query, nodes,
 			func(n *User) { n.Edges.Roles = []*Role{} },
 			func(n *User, e *Role) { n.Edges.Roles = append(n.Edges.Roles, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := uq.withLogLogins; query != nil {
+		if err := uq.loadLogLogins(ctx, query, nodes,
+			func(n *User) { n.Edges.LogLogins = []*LogLogin{} },
+			func(n *User, e *LogLogin) { n.Edges.LogLogins = append(n.Edges.LogLogins, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := uq.withLogOperations; query != nil {
+		if err := uq.loadLogOperations(ctx, query, nodes,
+			func(n *User) { n.Edges.LogOperations = []*LogOperation{} },
+			func(n *User, e *LogOperation) { n.Edges.LogOperations = append(n.Edges.LogOperations, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -638,6 +726,66 @@ func (uq *UserQuery) loadRoles(ctx context.Context, query *RoleQuery, nodes []*U
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (uq *UserQuery) loadLogLogins(ctx context.Context, query *LogLoginQuery, nodes []*User, init func(*User), assign func(*User, *LogLogin)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(loglogin.FieldUUID)
+	}
+	query.Where(predicate.LogLogin(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.LogLoginsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UUID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "uuid" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (uq *UserQuery) loadLogOperations(ctx context.Context, query *LogOperationQuery, nodes []*User, init func(*User), assign func(*User, *LogOperation)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(logoperation.FieldUUID)
+	}
+	query.Where(predicate.LogOperation(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.LogOperationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UUID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "uuid" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

@@ -334,7 +334,7 @@ service Core {
 @server(
 	jwt: Auth
 	group: user
-	middleware: Authority
+	middleware: Operation,Authority
 )
 
 service Core {

@@ -12,6 +12,8 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/department"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/dictionary"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/dictionarydetail"
+	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/loglogin"
+	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/logoperation"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/menu"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/oauthprovider"
 	"github.com/suyuan32/simple-admin-core/rpc/internal/logic/position"
@@ -155,6 +157,58 @@ func (s *CoreServer) DeleteDictionaryDetail(ctx context.Context, in *core.IDsReq
 func (s *CoreServer) GetDictionaryDetailByDictionaryName(ctx context.Context, in *core.BaseMsg) (*core.DictionaryDetailListResp, error) {
 	l := dictionarydetail.NewGetDictionaryDetailByDictionaryNameLogic(ctx, s.svcCtx)
 	return l.GetDictionaryDetailByDictionaryName(in)
+}
+
+// LogLogin management
+func (s *CoreServer) CreateLogLogin(ctx context.Context, in *core.LogLoginInfo) (*core.BaseIDResp, error) {
+	l := loglogin.NewCreateLogLoginLogic(ctx, s.svcCtx)
+	return l.CreateLogLogin(in)
+}
+
+func (s *CoreServer) UpdateLogLogin(ctx context.Context, in *core.LogLoginInfo) (*core.BaseResp, error) {
+	l := loglogin.NewUpdateLogLoginLogic(ctx, s.svcCtx)
+	return l.UpdateLogLogin(in)
+}
+
+func (s *CoreServer) GetLogLoginList(ctx context.Context, in *core.LogLoginListReq) (*core.LogLoginListResp, error) {
+	l := loglogin.NewGetLogLoginListLogic(ctx, s.svcCtx)
+	return l.GetLogLoginList(in)
+}
+
+func (s *CoreServer) GetLogLoginById(ctx context.Context, in *core.IDReq) (*core.LogLoginInfo, error) {
+	l := loglogin.NewGetLogLoginByIdLogic(ctx, s.svcCtx)
+	return l.GetLogLoginById(in)
+}
+
+func (s *CoreServer) DeleteLogLogin(ctx context.Context, in *core.IDsReq) (*core.BaseResp, error) {
+	l := loglogin.NewDeleteLogLoginLogic(ctx, s.svcCtx)
+	return l.DeleteLogLogin(in)
+}
+
+// LogOperation management
+func (s *CoreServer) CreateLogOperation(ctx context.Context, in *core.LogOperationInfo) (*core.BaseIDResp, error) {
+	l := logoperation.NewCreateLogOperationLogic(ctx, s.svcCtx)
+	return l.CreateLogOperation(in)
+}
+
+func (s *CoreServer) UpdateLogOperation(ctx context.Context, in *core.LogOperationInfo) (*core.BaseResp, error) {
+	l := logoperation.NewUpdateLogOperationLogic(ctx, s.svcCtx)
+	return l.UpdateLogOperation(in)
+}
+
+func (s *CoreServer) GetLogOperationList(ctx context.Context, in *core.LogOperationListReq) (*core.LogOperationListResp, error) {
+	l := logoperation.NewGetLogOperationListLogic(ctx, s.svcCtx)
+	return l.GetLogOperationList(in)
+}
+
+func (s *CoreServer) GetLogOperationById(ctx context.Context, in *core.IDReq) (*core.LogOperationInfo, error) {
+	l := logoperation.NewGetLogOperationByIdLogic(ctx, s.svcCtx)
+	return l.GetLogOperationById(in)
+}
+
+func (s *CoreServer) DeleteLogOperation(ctx context.Context, in *core.IDsReq) (*core.BaseResp, error) {
+	l := logoperation.NewDeleteLogOperationLogic(ctx, s.svcCtx)
+	return l.DeleteLogOperation(in)
 }
 
 func (s *CoreServer) CreateMenu(ctx context.Context, in *core.MenuInfo) (*core.BaseIDResp, error) {

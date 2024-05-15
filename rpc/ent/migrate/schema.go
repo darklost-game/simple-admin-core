@@ -105,6 +105,114 @@ var (
 			},
 		},
 	}
+	// SysLogLoginsColumns holds the columns for the "sys_log_logins" table.
+	SysLogLoginsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint64, Increment: true},
+		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
+		{Name: "type", Type: field.TypeString, Comment: "Login type | 登录类型"},
+		{Name: "auth_id", Type: field.TypeString, Comment: "Login Auth ID|登录认证ID"},
+		{Name: "ip", Type: field.TypeString, Comment: "IP address | IP地址"},
+		{Name: "location", Type: field.TypeString, Nullable: true, Comment: "Login location | 登录地点"},
+		{Name: "device", Type: field.TypeString, Nullable: true, Comment: "Login device | 登录设备"},
+		{Name: "browser", Type: field.TypeString, Nullable: true, Comment: "Login browser | 登录浏览器"},
+		{Name: "os", Type: field.TypeString, Nullable: true, Comment: "Login OS | 登录操作系统"},
+		{Name: "result", Type: field.TypeString, Comment: "Login result | 登录结果"},
+		{Name: "message", Type: field.TypeString, Nullable: true, Comment: "Login message | 登录消息"},
+		{Name: "login_at", Type: field.TypeTime, Comment: "Login time | 登录时间"},
+		{Name: "uuid", Type: field.TypeUUID, Nullable: true, Comment: " User's UUID | 用户的UUID"},
+	}
+	// SysLogLoginsTable holds the schema information for the "sys_log_logins" table.
+	SysLogLoginsTable = &schema.Table{
+		Name:       "sys_log_logins",
+		Comment:    "System Login Log Table|系统登录日志表",
+		Columns:    SysLogLoginsColumns,
+		PrimaryKey: []*schema.Column{SysLogLoginsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "sys_log_logins_sys_users_log_logins",
+				Columns:    []*schema.Column{SysLogLoginsColumns[13]},
+				RefColumns: []*schema.Column{SysUsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "loglogin_login_at",
+				Unique:  false,
+				Columns: []*schema.Column{SysLogLoginsColumns[12]},
+			},
+			{
+				Name:    "loglogin_uuid",
+				Unique:  false,
+				Columns: []*schema.Column{SysLogLoginsColumns[13]},
+			},
+			{
+				Name:    "loglogin_auth_id",
+				Unique:  false,
+				Columns: []*schema.Column{SysLogLoginsColumns[4]},
+			},
+			{
+				Name:    "loglogin_uuid_login_at",
+				Unique:  false,
+				Columns: []*schema.Column{SysLogLoginsColumns[13], SysLogLoginsColumns[12]},
+			},
+			{
+				Name:    "loglogin_auth_id_login_at",
+				Unique:  false,
+				Columns: []*schema.Column{SysLogLoginsColumns[4], SysLogLoginsColumns[12]},
+			},
+		},
+	}
+	// SysLogOperationsColumns holds the columns for the "sys_log_operations" table.
+	SysLogOperationsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint64, Increment: true},
+		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
+		{Name: "method", Type: field.TypeString, Comment: "HTTP request method|HTTP请求方法"},
+		{Name: "path", Type: field.TypeString, Comment: "HTTP request path|HTTP请求路径"},
+		{Name: "headers", Type: field.TypeString, Size: 2048, Comment: "HTTP request headers|HTTP请求头部"},
+		{Name: "body", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "HTTP request body|HTTP请求体"},
+		{Name: "status_code", Type: field.TypeInt, Comment: "HTTP response status code|HTTP响应状态码"},
+		{Name: "res_headers", Type: field.TypeString, Size: 2048, Comment: "HTTP response headers|HTTP响应头部"},
+		{Name: "res_body", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "HTTP response body|HTTP响应体"},
+		{Name: "req_time", Type: field.TypeTime, Comment: "Time when the request was made|请求发起时间"},
+		{Name: "res_time", Type: field.TypeTime, Comment: "Time when the response was received|响应接收时间"},
+		{Name: "cost_time", Type: field.TypeUint64, Comment: "Cost time of the request in milliseconds|请求耗时（毫秒）"},
+		{Name: "uuid", Type: field.TypeUUID, Comment: " User's UUID | 用户的UUID"},
+	}
+	// SysLogOperationsTable holds the schema information for the "sys_log_operations" table.
+	SysLogOperationsTable = &schema.Table{
+		Name:       "sys_log_operations",
+		Comment:    "System Operation Log Table| 系统操作日志表",
+		Columns:    SysLogOperationsColumns,
+		PrimaryKey: []*schema.Column{SysLogOperationsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "sys_log_operations_sys_users_log_operations",
+				Columns:    []*schema.Column{SysLogOperationsColumns[13]},
+				RefColumns: []*schema.Column{SysUsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "logoperation_req_time",
+				Unique:  false,
+				Columns: []*schema.Column{SysLogOperationsColumns[10]},
+			},
+			{
+				Name:    "logoperation_uuid",
+				Unique:  false,
+				Columns: []*schema.Column{SysLogOperationsColumns[13]},
+			},
+			{
+				Name:    "logoperation_uuid_req_time",
+				Unique:  false,
+				Columns: []*schema.Column{SysLogOperationsColumns[13], SysLogOperationsColumns[10]},
+			},
+		},
+	}
 	// SysMenusColumns holds the columns for the "sys_menus" table.
 	SysMenusColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint64, Increment: true},
@@ -378,6 +486,8 @@ var (
 		SysDepartmentsTable,
 		SysDictionariesTable,
 		SysDictionaryDetailsTable,
+		SysLogLoginsTable,
+		SysLogOperationsTable,
 		SysMenusTable,
 		SysOauthProvidersTable,
 		SysPositionsTable,
@@ -404,6 +514,14 @@ func init() {
 	SysDictionaryDetailsTable.ForeignKeys[0].RefTable = SysDictionariesTable
 	SysDictionaryDetailsTable.Annotation = &entsql.Annotation{
 		Table: "sys_dictionary_details",
+	}
+	SysLogLoginsTable.ForeignKeys[0].RefTable = SysUsersTable
+	SysLogLoginsTable.Annotation = &entsql.Annotation{
+		Table: "sys_log_logins",
+	}
+	SysLogOperationsTable.ForeignKeys[0].RefTable = SysUsersTable
+	SysLogOperationsTable.Annotation = &entsql.Annotation{
+		Table: "sys_log_operations",
 	}
 	SysMenusTable.ForeignKeys[0].RefTable = SysMenusTable
 	SysMenusTable.Annotation = &entsql.Annotation{

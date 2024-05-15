@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/department"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/loglogin"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/logoperation"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/predicate"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/role"
@@ -289,6 +291,36 @@ func (uu *UserUpdate) AddRoles(r ...*Role) *UserUpdate {
 	return uu.AddRoleIDs(ids...)
 }
 
+// AddLogLoginIDs adds the "log_logins" edge to the LogLogin entity by IDs.
+func (uu *UserUpdate) AddLogLoginIDs(ids ...uint64) *UserUpdate {
+	uu.mutation.AddLogLoginIDs(ids...)
+	return uu
+}
+
+// AddLogLogins adds the "log_logins" edges to the LogLogin entity.
+func (uu *UserUpdate) AddLogLogins(l ...*LogLogin) *UserUpdate {
+	ids := make([]uint64, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return uu.AddLogLoginIDs(ids...)
+}
+
+// AddLogOperationIDs adds the "log_operations" edge to the LogOperation entity by IDs.
+func (uu *UserUpdate) AddLogOperationIDs(ids ...uint64) *UserUpdate {
+	uu.mutation.AddLogOperationIDs(ids...)
+	return uu
+}
+
+// AddLogOperations adds the "log_operations" edges to the LogOperation entity.
+func (uu *UserUpdate) AddLogOperations(l ...*LogOperation) *UserUpdate {
+	ids := make([]uint64, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return uu.AddLogOperationIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
@@ -340,6 +372,48 @@ func (uu *UserUpdate) RemoveRoles(r ...*Role) *UserUpdate {
 		ids[i] = r[i].ID
 	}
 	return uu.RemoveRoleIDs(ids...)
+}
+
+// ClearLogLogins clears all "log_logins" edges to the LogLogin entity.
+func (uu *UserUpdate) ClearLogLogins() *UserUpdate {
+	uu.mutation.ClearLogLogins()
+	return uu
+}
+
+// RemoveLogLoginIDs removes the "log_logins" edge to LogLogin entities by IDs.
+func (uu *UserUpdate) RemoveLogLoginIDs(ids ...uint64) *UserUpdate {
+	uu.mutation.RemoveLogLoginIDs(ids...)
+	return uu
+}
+
+// RemoveLogLogins removes "log_logins" edges to LogLogin entities.
+func (uu *UserUpdate) RemoveLogLogins(l ...*LogLogin) *UserUpdate {
+	ids := make([]uint64, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return uu.RemoveLogLoginIDs(ids...)
+}
+
+// ClearLogOperations clears all "log_operations" edges to the LogOperation entity.
+func (uu *UserUpdate) ClearLogOperations() *UserUpdate {
+	uu.mutation.ClearLogOperations()
+	return uu
+}
+
+// RemoveLogOperationIDs removes the "log_operations" edge to LogOperation entities by IDs.
+func (uu *UserUpdate) RemoveLogOperationIDs(ids ...uint64) *UserUpdate {
+	uu.mutation.RemoveLogOperationIDs(ids...)
+	return uu
+}
+
+// RemoveLogOperations removes "log_operations" edges to LogOperation entities.
+func (uu *UserUpdate) RemoveLogOperations(l ...*LogOperation) *UserUpdate {
+	ids := make([]uint64, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return uu.RemoveLogOperationIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -559,6 +633,96 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.LogLoginsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogLoginsTable,
+			Columns: []string{user.LogLoginsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(loglogin.FieldID, field.TypeUint64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedLogLoginsIDs(); len(nodes) > 0 && !uu.mutation.LogLoginsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogLoginsTable,
+			Columns: []string{user.LogLoginsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(loglogin.FieldID, field.TypeUint64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.LogLoginsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogLoginsTable,
+			Columns: []string{user.LogLoginsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(loglogin.FieldID, field.TypeUint64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.LogOperationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogOperationsTable,
+			Columns: []string{user.LogOperationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(logoperation.FieldID, field.TypeUint64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedLogOperationsIDs(); len(nodes) > 0 && !uu.mutation.LogOperationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogOperationsTable,
+			Columns: []string{user.LogOperationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(logoperation.FieldID, field.TypeUint64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.LogOperationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogOperationsTable,
+			Columns: []string{user.LogOperationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(logoperation.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -844,6 +1008,36 @@ func (uuo *UserUpdateOne) AddRoles(r ...*Role) *UserUpdateOne {
 	return uuo.AddRoleIDs(ids...)
 }
 
+// AddLogLoginIDs adds the "log_logins" edge to the LogLogin entity by IDs.
+func (uuo *UserUpdateOne) AddLogLoginIDs(ids ...uint64) *UserUpdateOne {
+	uuo.mutation.AddLogLoginIDs(ids...)
+	return uuo
+}
+
+// AddLogLogins adds the "log_logins" edges to the LogLogin entity.
+func (uuo *UserUpdateOne) AddLogLogins(l ...*LogLogin) *UserUpdateOne {
+	ids := make([]uint64, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return uuo.AddLogLoginIDs(ids...)
+}
+
+// AddLogOperationIDs adds the "log_operations" edge to the LogOperation entity by IDs.
+func (uuo *UserUpdateOne) AddLogOperationIDs(ids ...uint64) *UserUpdateOne {
+	uuo.mutation.AddLogOperationIDs(ids...)
+	return uuo
+}
+
+// AddLogOperations adds the "log_operations" edges to the LogOperation entity.
+func (uuo *UserUpdateOne) AddLogOperations(l ...*LogOperation) *UserUpdateOne {
+	ids := make([]uint64, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return uuo.AddLogOperationIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
@@ -895,6 +1089,48 @@ func (uuo *UserUpdateOne) RemoveRoles(r ...*Role) *UserUpdateOne {
 		ids[i] = r[i].ID
 	}
 	return uuo.RemoveRoleIDs(ids...)
+}
+
+// ClearLogLogins clears all "log_logins" edges to the LogLogin entity.
+func (uuo *UserUpdateOne) ClearLogLogins() *UserUpdateOne {
+	uuo.mutation.ClearLogLogins()
+	return uuo
+}
+
+// RemoveLogLoginIDs removes the "log_logins" edge to LogLogin entities by IDs.
+func (uuo *UserUpdateOne) RemoveLogLoginIDs(ids ...uint64) *UserUpdateOne {
+	uuo.mutation.RemoveLogLoginIDs(ids...)
+	return uuo
+}
+
+// RemoveLogLogins removes "log_logins" edges to LogLogin entities.
+func (uuo *UserUpdateOne) RemoveLogLogins(l ...*LogLogin) *UserUpdateOne {
+	ids := make([]uint64, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return uuo.RemoveLogLoginIDs(ids...)
+}
+
+// ClearLogOperations clears all "log_operations" edges to the LogOperation entity.
+func (uuo *UserUpdateOne) ClearLogOperations() *UserUpdateOne {
+	uuo.mutation.ClearLogOperations()
+	return uuo
+}
+
+// RemoveLogOperationIDs removes the "log_operations" edge to LogOperation entities by IDs.
+func (uuo *UserUpdateOne) RemoveLogOperationIDs(ids ...uint64) *UserUpdateOne {
+	uuo.mutation.RemoveLogOperationIDs(ids...)
+	return uuo
+}
+
+// RemoveLogOperations removes "log_operations" edges to LogOperation entities.
+func (uuo *UserUpdateOne) RemoveLogOperations(l ...*LogOperation) *UserUpdateOne {
+	ids := make([]uint64, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return uuo.RemoveLogOperationIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -1144,6 +1380,96 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.LogLoginsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogLoginsTable,
+			Columns: []string{user.LogLoginsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(loglogin.FieldID, field.TypeUint64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedLogLoginsIDs(); len(nodes) > 0 && !uuo.mutation.LogLoginsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogLoginsTable,
+			Columns: []string{user.LogLoginsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(loglogin.FieldID, field.TypeUint64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.LogLoginsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogLoginsTable,
+			Columns: []string{user.LogLoginsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(loglogin.FieldID, field.TypeUint64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.LogOperationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogOperationsTable,
+			Columns: []string{user.LogOperationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(logoperation.FieldID, field.TypeUint64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedLogOperationsIDs(); len(nodes) > 0 && !uuo.mutation.LogOperationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogOperationsTable,
+			Columns: []string{user.LogOperationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(logoperation.FieldID, field.TypeUint64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.LogOperationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogOperationsTable,
+			Columns: []string{user.LogOperationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(logoperation.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {

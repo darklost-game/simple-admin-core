@@ -53,7 +53,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -132,7 +132,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -196,7 +196,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -255,7 +255,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -289,7 +289,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -318,7 +318,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -367,7 +367,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -401,7 +401,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -440,7 +440,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -474,7 +474,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -508,7 +508,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -547,7 +547,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -581,7 +581,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -615,7 +615,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -649,7 +649,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -683,7 +683,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -717,7 +717,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -751,7 +751,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
@@ -765,7 +765,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Middleware{serverCtx.Operation, serverCtx.Authority},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,

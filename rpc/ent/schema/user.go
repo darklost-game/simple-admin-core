@@ -66,6 +66,8 @@ func (User) Edges() []ent.Edge {
 		edge.To("departments", Department.Type).Unique().Field("department_id"),
 		edge.To("positions", Position.Type),
 		edge.To("roles", Role.Type),
+		edge.To("log_logins", LogLogin.Type),
+		edge.To("log_operations", LogOperation.Type),
 	}
 }
 

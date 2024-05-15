@@ -20,6 +20,8 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/ent/department"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/dictionary"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/dictionarydetail"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/loglogin"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/logoperation"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/menu"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/oauthprovider"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
@@ -43,6 +45,10 @@ type Client struct {
 	Dictionary *DictionaryClient
 	// DictionaryDetail is the client for interacting with the DictionaryDetail builders.
 	DictionaryDetail *DictionaryDetailClient
+	// LogLogin is the client for interacting with the LogLogin builders.
+	LogLogin *LogLoginClient
+	// LogOperation is the client for interacting with the LogOperation builders.
+	LogOperation *LogOperationClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
 	// OauthProvider is the client for interacting with the OauthProvider builders.
@@ -70,6 +76,8 @@ func (c *Client) init() {
 	c.Department = NewDepartmentClient(c.config)
 	c.Dictionary = NewDictionaryClient(c.config)
 	c.DictionaryDetail = NewDictionaryDetailClient(c.config)
+	c.LogLogin = NewLogLoginClient(c.config)
+	c.LogOperation = NewLogOperationClient(c.config)
 	c.Menu = NewMenuClient(c.config)
 	c.OauthProvider = NewOauthProviderClient(c.config)
 	c.Position = NewPositionClient(c.config)
@@ -172,6 +180,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Department:       NewDepartmentClient(cfg),
 		Dictionary:       NewDictionaryClient(cfg),
 		DictionaryDetail: NewDictionaryDetailClient(cfg),
+		LogLogin:         NewLogLoginClient(cfg),
+		LogOperation:     NewLogOperationClient(cfg),
 		Menu:             NewMenuClient(cfg),
 		OauthProvider:    NewOauthProviderClient(cfg),
 		Position:         NewPositionClient(cfg),
@@ -201,6 +211,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Department:       NewDepartmentClient(cfg),
 		Dictionary:       NewDictionaryClient(cfg),
 		DictionaryDetail: NewDictionaryDetailClient(cfg),
+		LogLogin:         NewLogLoginClient(cfg),
+		LogOperation:     NewLogOperationClient(cfg),
 		Menu:             NewMenuClient(cfg),
 		OauthProvider:    NewOauthProviderClient(cfg),
 		Position:         NewPositionClient(cfg),
@@ -236,8 +248,8 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.API, c.Department, c.Dictionary, c.DictionaryDetail, c.Menu, c.OauthProvider,
-		c.Position, c.Role, c.Token, c.User,
+		c.API, c.Department, c.Dictionary, c.DictionaryDetail, c.LogLogin,
+		c.LogOperation, c.Menu, c.OauthProvider, c.Position, c.Role, c.Token, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -247,8 +259,8 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.API, c.Department, c.Dictionary, c.DictionaryDetail, c.Menu, c.OauthProvider,
-		c.Position, c.Role, c.Token, c.User,
+		c.API, c.Department, c.Dictionary, c.DictionaryDetail, c.LogLogin,
+		c.LogOperation, c.Menu, c.OauthProvider, c.Position, c.Role, c.Token, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -265,6 +277,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Dictionary.mutate(ctx, m)
 	case *DictionaryDetailMutation:
 		return c.DictionaryDetail.mutate(ctx, m)
+	case *LogLoginMutation:
+		return c.LogLogin.mutate(ctx, m)
+	case *LogOperationMutation:
+		return c.LogOperation.mutate(ctx, m)
 	case *MenuMutation:
 		return c.Menu.mutate(ctx, m)
 	case *OauthProviderMutation:
@@ -891,6 +907,304 @@ func (c *DictionaryDetailClient) mutate(ctx context.Context, m *DictionaryDetail
 		return (&DictionaryDetailDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown DictionaryDetail mutation op: %q", m.Op())
+	}
+}
+
+// LogLoginClient is a client for the LogLogin schema.
+type LogLoginClient struct {
+	config
+}
+
+// NewLogLoginClient returns a client for the LogLogin from the given config.
+func NewLogLoginClient(c config) *LogLoginClient {
+	return &LogLoginClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `loglogin.Hooks(f(g(h())))`.
+func (c *LogLoginClient) Use(hooks ...Hook) {
+	c.hooks.LogLogin = append(c.hooks.LogLogin, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `loglogin.Intercept(f(g(h())))`.
+func (c *LogLoginClient) Intercept(interceptors ...Interceptor) {
+	c.inters.LogLogin = append(c.inters.LogLogin, interceptors...)
+}
+
+// Create returns a builder for creating a LogLogin entity.
+func (c *LogLoginClient) Create() *LogLoginCreate {
+	mutation := newLogLoginMutation(c.config, OpCreate)
+	return &LogLoginCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of LogLogin entities.
+func (c *LogLoginClient) CreateBulk(builders ...*LogLoginCreate) *LogLoginCreateBulk {
+	return &LogLoginCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *LogLoginClient) MapCreateBulk(slice any, setFunc func(*LogLoginCreate, int)) *LogLoginCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &LogLoginCreateBulk{err: fmt.Errorf("calling to LogLoginClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*LogLoginCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &LogLoginCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for LogLogin.
+func (c *LogLoginClient) Update() *LogLoginUpdate {
+	mutation := newLogLoginMutation(c.config, OpUpdate)
+	return &LogLoginUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LogLoginClient) UpdateOne(ll *LogLogin) *LogLoginUpdateOne {
+	mutation := newLogLoginMutation(c.config, OpUpdateOne, withLogLogin(ll))
+	return &LogLoginUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LogLoginClient) UpdateOneID(id uint64) *LogLoginUpdateOne {
+	mutation := newLogLoginMutation(c.config, OpUpdateOne, withLogLoginID(id))
+	return &LogLoginUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for LogLogin.
+func (c *LogLoginClient) Delete() *LogLoginDelete {
+	mutation := newLogLoginMutation(c.config, OpDelete)
+	return &LogLoginDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *LogLoginClient) DeleteOne(ll *LogLogin) *LogLoginDeleteOne {
+	return c.DeleteOneID(ll.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *LogLoginClient) DeleteOneID(id uint64) *LogLoginDeleteOne {
+	builder := c.Delete().Where(loglogin.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LogLoginDeleteOne{builder}
+}
+
+// Query returns a query builder for LogLogin.
+func (c *LogLoginClient) Query() *LogLoginQuery {
+	return &LogLoginQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeLogLogin},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a LogLogin entity by its id.
+func (c *LogLoginClient) Get(ctx context.Context, id uint64) (*LogLogin, error) {
+	return c.Query().Where(loglogin.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LogLoginClient) GetX(ctx context.Context, id uint64) *LogLogin {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUser queries the user edge of a LogLogin.
+func (c *LogLoginClient) QueryUser(ll *LogLogin) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ll.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(loglogin.Table, loglogin.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, loglogin.UserTable, loglogin.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(ll.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *LogLoginClient) Hooks() []Hook {
+	return c.hooks.LogLogin
+}
+
+// Interceptors returns the client interceptors.
+func (c *LogLoginClient) Interceptors() []Interceptor {
+	return c.inters.LogLogin
+}
+
+func (c *LogLoginClient) mutate(ctx context.Context, m *LogLoginMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LogLoginCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LogLoginUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LogLoginUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LogLoginDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown LogLogin mutation op: %q", m.Op())
+	}
+}
+
+// LogOperationClient is a client for the LogOperation schema.
+type LogOperationClient struct {
+	config
+}
+
+// NewLogOperationClient returns a client for the LogOperation from the given config.
+func NewLogOperationClient(c config) *LogOperationClient {
+	return &LogOperationClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `logoperation.Hooks(f(g(h())))`.
+func (c *LogOperationClient) Use(hooks ...Hook) {
+	c.hooks.LogOperation = append(c.hooks.LogOperation, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `logoperation.Intercept(f(g(h())))`.
+func (c *LogOperationClient) Intercept(interceptors ...Interceptor) {
+	c.inters.LogOperation = append(c.inters.LogOperation, interceptors...)
+}
+
+// Create returns a builder for creating a LogOperation entity.
+func (c *LogOperationClient) Create() *LogOperationCreate {
+	mutation := newLogOperationMutation(c.config, OpCreate)
+	return &LogOperationCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of LogOperation entities.
+func (c *LogOperationClient) CreateBulk(builders ...*LogOperationCreate) *LogOperationCreateBulk {
+	return &LogOperationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *LogOperationClient) MapCreateBulk(slice any, setFunc func(*LogOperationCreate, int)) *LogOperationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &LogOperationCreateBulk{err: fmt.Errorf("calling to LogOperationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*LogOperationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &LogOperationCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for LogOperation.
+func (c *LogOperationClient) Update() *LogOperationUpdate {
+	mutation := newLogOperationMutation(c.config, OpUpdate)
+	return &LogOperationUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LogOperationClient) UpdateOne(lo *LogOperation) *LogOperationUpdateOne {
+	mutation := newLogOperationMutation(c.config, OpUpdateOne, withLogOperation(lo))
+	return &LogOperationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LogOperationClient) UpdateOneID(id uint64) *LogOperationUpdateOne {
+	mutation := newLogOperationMutation(c.config, OpUpdateOne, withLogOperationID(id))
+	return &LogOperationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for LogOperation.
+func (c *LogOperationClient) Delete() *LogOperationDelete {
+	mutation := newLogOperationMutation(c.config, OpDelete)
+	return &LogOperationDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *LogOperationClient) DeleteOne(lo *LogOperation) *LogOperationDeleteOne {
+	return c.DeleteOneID(lo.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *LogOperationClient) DeleteOneID(id uint64) *LogOperationDeleteOne {
+	builder := c.Delete().Where(logoperation.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LogOperationDeleteOne{builder}
+}
+
+// Query returns a query builder for LogOperation.
+func (c *LogOperationClient) Query() *LogOperationQuery {
+	return &LogOperationQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeLogOperation},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a LogOperation entity by its id.
+func (c *LogOperationClient) Get(ctx context.Context, id uint64) (*LogOperation, error) {
+	return c.Query().Where(logoperation.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LogOperationClient) GetX(ctx context.Context, id uint64) *LogOperation {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUser queries the user edge of a LogOperation.
+func (c *LogOperationClient) QueryUser(lo *LogOperation) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := lo.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(logoperation.Table, logoperation.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, logoperation.UserTable, logoperation.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(lo.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *LogOperationClient) Hooks() []Hook {
+	return c.hooks.LogOperation
+}
+
+// Interceptors returns the client interceptors.
+func (c *LogOperationClient) Interceptors() []Interceptor {
+	return c.inters.LogOperation
+}
+
+func (c *LogOperationClient) mutate(ctx context.Context, m *LogOperationMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LogOperationCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LogOperationUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LogOperationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LogOperationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown LogOperation mutation op: %q", m.Op())
 	}
 }
 
@@ -1811,6 +2125,38 @@ func (c *UserClient) QueryRoles(u *User) *RoleQuery {
 	return query
 }
 
+// QueryLogLogins queries the log_logins edge of a User.
+func (c *UserClient) QueryLogLogins(u *User) *LogLoginQuery {
+	query := (&LogLoginClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(loglogin.Table, loglogin.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.LogLoginsTable, user.LogLoginsColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLogOperations queries the log_operations edge of a User.
+func (c *UserClient) QueryLogOperations(u *User) *LogOperationQuery {
+	query := (&LogOperationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(logoperation.Table, logoperation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.LogOperationsTable, user.LogOperationsColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *UserClient) Hooks() []Hook {
 	hooks := c.hooks.User
@@ -1841,12 +2187,12 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		API, Department, Dictionary, DictionaryDetail, Menu, OauthProvider, Position,
-		Role, Token, User []ent.Hook
+		API, Department, Dictionary, DictionaryDetail, LogLogin, LogOperation, Menu,
+		OauthProvider, Position, Role, Token, User []ent.Hook
 	}
 	inters struct {
-		API, Department, Dictionary, DictionaryDetail, Menu, OauthProvider, Position,
-		Role, Token, User []ent.Interceptor
+		API, Department, Dictionary, DictionaryDetail, LogLogin, LogOperation, Menu,
+		OauthProvider, Position, Role, Token, User []ent.Interceptor
 	}
 )
 

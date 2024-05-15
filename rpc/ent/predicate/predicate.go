@@ -18,6 +18,12 @@ type Dictionary func(*sql.Selector)
 // DictionaryDetail is the predicate function for dictionarydetail builders.
 type DictionaryDetail func(*sql.Selector)
 
+// LogLogin is the predicate function for loglogin builders.
+type LogLogin func(*sql.Selector)
+
+// LogOperation is the predicate function for logoperation builders.
+type LogOperation func(*sql.Selector)
+
 // Menu is the predicate function for menu builders.
 type Menu func(*sql.Selector)
 

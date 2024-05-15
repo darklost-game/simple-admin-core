@@ -33,6 +33,12 @@ type (
 	Empty                    = core.Empty
 	IDReq                    = core.IDReq
 	IDsReq                   = core.IDsReq
+	LogLoginInfo             = core.LogLoginInfo
+	LogLoginListReq          = core.LogLoginListReq
+	LogLoginListResp         = core.LogLoginListResp
+	LogOperationInfo         = core.LogOperationInfo
+	LogOperationListReq      = core.LogOperationListReq
+	LogOperationListResp     = core.LogOperationListResp
 	MenuInfo                 = core.MenuInfo
 	MenuInfoList             = core.MenuInfoList
 	MenuRoleInfo             = core.MenuRoleInfo
@@ -91,6 +97,18 @@ type (
 		GetDictionaryDetailById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*DictionaryDetailInfo, error)
 		DeleteDictionaryDetail(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error)
 		GetDictionaryDetailByDictionaryName(ctx context.Context, in *BaseMsg, opts ...grpc.CallOption) (*DictionaryDetailListResp, error)
+		// LogLogin management
+		CreateLogLogin(ctx context.Context, in *LogLoginInfo, opts ...grpc.CallOption) (*BaseIDResp, error)
+		UpdateLogLogin(ctx context.Context, in *LogLoginInfo, opts ...grpc.CallOption) (*BaseResp, error)
+		GetLogLoginList(ctx context.Context, in *LogLoginListReq, opts ...grpc.CallOption) (*LogLoginListResp, error)
+		GetLogLoginById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*LogLoginInfo, error)
+		DeleteLogLogin(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error)
+		// LogOperation management
+		CreateLogOperation(ctx context.Context, in *LogOperationInfo, opts ...grpc.CallOption) (*BaseIDResp, error)
+		UpdateLogOperation(ctx context.Context, in *LogOperationInfo, opts ...grpc.CallOption) (*BaseResp, error)
+		GetLogOperationList(ctx context.Context, in *LogOperationListReq, opts ...grpc.CallOption) (*LogOperationListResp, error)
+		GetLogOperationById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*LogOperationInfo, error)
+		DeleteLogOperation(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error)
 		CreateMenu(ctx context.Context, in *MenuInfo, opts ...grpc.CallOption) (*BaseIDResp, error)
 		UpdateMenu(ctx context.Context, in *MenuInfo, opts ...grpc.CallOption) (*BaseResp, error)
 		DeleteMenu(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*BaseResp, error)
@@ -265,6 +283,58 @@ func (m *defaultCore) DeleteDictionaryDetail(ctx context.Context, in *IDsReq, op
 func (m *defaultCore) GetDictionaryDetailByDictionaryName(ctx context.Context, in *BaseMsg, opts ...grpc.CallOption) (*DictionaryDetailListResp, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.GetDictionaryDetailByDictionaryName(ctx, in, opts...)
+}
+
+// LogLogin management
+func (m *defaultCore) CreateLogLogin(ctx context.Context, in *LogLoginInfo, opts ...grpc.CallOption) (*BaseIDResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.CreateLogLogin(ctx, in, opts...)
+}
+
+func (m *defaultCore) UpdateLogLogin(ctx context.Context, in *LogLoginInfo, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.UpdateLogLogin(ctx, in, opts...)
+}
+
+func (m *defaultCore) GetLogLoginList(ctx context.Context, in *LogLoginListReq, opts ...grpc.CallOption) (*LogLoginListResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.GetLogLoginList(ctx, in, opts...)
+}
+
+func (m *defaultCore) GetLogLoginById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*LogLoginInfo, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.GetLogLoginById(ctx, in, opts...)
+}
+
+func (m *defaultCore) DeleteLogLogin(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.DeleteLogLogin(ctx, in, opts...)
+}
+
+// LogOperation management
+func (m *defaultCore) CreateLogOperation(ctx context.Context, in *LogOperationInfo, opts ...grpc.CallOption) (*BaseIDResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.CreateLogOperation(ctx, in, opts...)
+}
+
+func (m *defaultCore) UpdateLogOperation(ctx context.Context, in *LogOperationInfo, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.UpdateLogOperation(ctx, in, opts...)
+}
+
+func (m *defaultCore) GetLogOperationList(ctx context.Context, in *LogOperationListReq, opts ...grpc.CallOption) (*LogOperationListResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.GetLogOperationList(ctx, in, opts...)
+}
+
+func (m *defaultCore) GetLogOperationById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*LogOperationInfo, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.GetLogOperationById(ctx, in, opts...)
+}
+
+func (m *defaultCore) DeleteLogOperation(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := core.NewCoreClient(m.cli.Conn())
+	return client.DeleteLogOperation(ctx, in, opts...)
 }
 
 func (m *defaultCore) CreateMenu(ctx context.Context, in *MenuInfo, opts ...grpc.CallOption) (*BaseIDResp, error) {

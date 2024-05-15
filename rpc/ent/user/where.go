@@ -960,6 +960,52 @@ func HasRolesWith(preds ...predicate.Role) predicate.User {
 	})
 }
 
+// HasLogLogins applies the HasEdge predicate on the "log_logins" edge.
+func HasLogLogins() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, LogLoginsTable, LogLoginsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLogLoginsWith applies the HasEdge predicate on the "log_logins" edge with a given conditions (other predicates).
+func HasLogLoginsWith(preds ...predicate.LogLogin) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newLogLoginsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLogOperations applies the HasEdge predicate on the "log_operations" edge.
+func HasLogOperations() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, LogOperationsTable, LogOperationsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLogOperationsWith applies the HasEdge predicate on the "log_operations" edge with a given conditions (other predicates).
+func HasLogOperationsWith(preds ...predicate.LogOperation) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newLogOperationsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.User) predicate.User {
 	return predicate.User(sql.AndPredicates(predicates...))

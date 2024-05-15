@@ -10,6 +10,8 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/ent/department"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/dictionary"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/dictionarydetail"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/loglogin"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/logoperation"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/menu"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/oauthprovider"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
@@ -129,6 +131,56 @@ func init() {
 	dictionarydetailDescSort := dictionarydetailMixinFields2[0].Descriptor()
 	// dictionarydetail.DefaultSort holds the default value on creation for the sort field.
 	dictionarydetail.DefaultSort = dictionarydetailDescSort.Default.(uint32)
+	logloginMixin := schema.LogLogin{}.Mixin()
+	logloginMixinFields0 := logloginMixin[0].Fields()
+	_ = logloginMixinFields0
+	logloginFields := schema.LogLogin{}.Fields()
+	_ = logloginFields
+	// logloginDescCreatedAt is the schema descriptor for created_at field.
+	logloginDescCreatedAt := logloginMixinFields0[1].Descriptor()
+	// loglogin.DefaultCreatedAt holds the default value on creation for the created_at field.
+	loglogin.DefaultCreatedAt = logloginDescCreatedAt.Default.(func() time.Time)
+	// logloginDescUpdatedAt is the schema descriptor for updated_at field.
+	logloginDescUpdatedAt := logloginMixinFields0[2].Descriptor()
+	// loglogin.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	loglogin.DefaultUpdatedAt = logloginDescUpdatedAt.Default.(func() time.Time)
+	// loglogin.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	loglogin.UpdateDefaultUpdatedAt = logloginDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// logloginDescLoginAt is the schema descriptor for login_at field.
+	logloginDescLoginAt := logloginFields[10].Descriptor()
+	// loglogin.DefaultLoginAt holds the default value on creation for the login_at field.
+	loglogin.DefaultLoginAt = logloginDescLoginAt.Default.(func() time.Time)
+	logoperationMixin := schema.LogOperation{}.Mixin()
+	logoperationMixinFields0 := logoperationMixin[0].Fields()
+	_ = logoperationMixinFields0
+	logoperationFields := schema.LogOperation{}.Fields()
+	_ = logoperationFields
+	// logoperationDescCreatedAt is the schema descriptor for created_at field.
+	logoperationDescCreatedAt := logoperationMixinFields0[1].Descriptor()
+	// logoperation.DefaultCreatedAt holds the default value on creation for the created_at field.
+	logoperation.DefaultCreatedAt = logoperationDescCreatedAt.Default.(func() time.Time)
+	// logoperationDescUpdatedAt is the schema descriptor for updated_at field.
+	logoperationDescUpdatedAt := logoperationMixinFields0[2].Descriptor()
+	// logoperation.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	logoperation.DefaultUpdatedAt = logoperationDescUpdatedAt.Default.(func() time.Time)
+	// logoperation.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	logoperation.UpdateDefaultUpdatedAt = logoperationDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// logoperationDescHeaders is the schema descriptor for headers field.
+	logoperationDescHeaders := logoperationFields[3].Descriptor()
+	// logoperation.HeadersValidator is a validator for the "headers" field. It is called by the builders before save.
+	logoperation.HeadersValidator = logoperationDescHeaders.Validators[0].(func(string) error)
+	// logoperationDescResHeaders is the schema descriptor for res_headers field.
+	logoperationDescResHeaders := logoperationFields[6].Descriptor()
+	// logoperation.ResHeadersValidator is a validator for the "res_headers" field. It is called by the builders before save.
+	logoperation.ResHeadersValidator = logoperationDescResHeaders.Validators[0].(func(string) error)
+	// logoperationDescReqTime is the schema descriptor for req_time field.
+	logoperationDescReqTime := logoperationFields[8].Descriptor()
+	// logoperation.DefaultReqTime holds the default value on creation for the req_time field.
+	logoperation.DefaultReqTime = logoperationDescReqTime.Default.(func() time.Time)
+	// logoperationDescResTime is the schema descriptor for res_time field.
+	logoperationDescResTime := logoperationFields[9].Descriptor()
+	// logoperation.DefaultResTime holds the default value on creation for the res_time field.
+	logoperation.DefaultResTime = logoperationDescResTime.Default.(func() time.Time)
 	menuMixin := schema.Menu{}.Mixin()
 	menuMixinFields0 := menuMixin[0].Fields()
 	_ = menuMixinFields0

@@ -10,6 +10,8 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/ent/department"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/dictionary"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/dictionarydetail"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/loglogin"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/logoperation"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/menu"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/oauthprovider"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
@@ -380,6 +382,168 @@ func (dd *DictionaryDetailQuery) Page(
 
 	dd = dd.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
 	list, err := dd.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	ret.List = list
+
+	return ret, nil
+}
+
+type LogLoginPager struct {
+	Order  loglogin.OrderOption
+	Filter func(*LogLoginQuery) (*LogLoginQuery, error)
+}
+
+// LogLoginPaginateOption enables pagination customization.
+type LogLoginPaginateOption func(*LogLoginPager)
+
+// DefaultLogLoginOrder is the default ordering of LogLogin.
+var DefaultLogLoginOrder = Desc(loglogin.FieldID)
+
+func newLogLoginPager(opts []LogLoginPaginateOption) (*LogLoginPager, error) {
+	pager := &LogLoginPager{}
+	for _, opt := range opts {
+		opt(pager)
+	}
+	if pager.Order == nil {
+		pager.Order = DefaultLogLoginOrder
+	}
+	return pager, nil
+}
+
+func (p *LogLoginPager) ApplyFilter(query *LogLoginQuery) (*LogLoginQuery, error) {
+	if p.Filter != nil {
+		return p.Filter(query)
+	}
+	return query, nil
+}
+
+// LogLoginPageList is LogLogin PageList result.
+type LogLoginPageList struct {
+	List        []*LogLogin  `json:"list"`
+	PageDetails *PageDetails `json:"pageDetails"`
+}
+
+func (ll *LogLoginQuery) Page(
+	ctx context.Context, pageNum uint64, pageSize uint64, opts ...LogLoginPaginateOption,
+) (*LogLoginPageList, error) {
+
+	pager, err := newLogLoginPager(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	if ll, err = pager.ApplyFilter(ll); err != nil {
+		return nil, err
+	}
+
+	ret := &LogLoginPageList{}
+
+	ret.PageDetails = &PageDetails{
+		Page: pageNum,
+		Size: pageSize,
+	}
+
+	query := ll.Clone()
+	query.ctx.Fields = nil
+	count, err := query.Count(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret.PageDetails.Total = uint64(count)
+
+	if pager.Order != nil {
+		ll = ll.Order(pager.Order)
+	} else {
+		ll = ll.Order(DefaultLogLoginOrder)
+	}
+
+	ll = ll.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
+	list, err := ll.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	ret.List = list
+
+	return ret, nil
+}
+
+type LogOperationPager struct {
+	Order  logoperation.OrderOption
+	Filter func(*LogOperationQuery) (*LogOperationQuery, error)
+}
+
+// LogOperationPaginateOption enables pagination customization.
+type LogOperationPaginateOption func(*LogOperationPager)
+
+// DefaultLogOperationOrder is the default ordering of LogOperation.
+var DefaultLogOperationOrder = Desc(logoperation.FieldID)
+
+func newLogOperationPager(opts []LogOperationPaginateOption) (*LogOperationPager, error) {
+	pager := &LogOperationPager{}
+	for _, opt := range opts {
+		opt(pager)
+	}
+	if pager.Order == nil {
+		pager.Order = DefaultLogOperationOrder
+	}
+	return pager, nil
+}
+
+func (p *LogOperationPager) ApplyFilter(query *LogOperationQuery) (*LogOperationQuery, error) {
+	if p.Filter != nil {
+		return p.Filter(query)
+	}
+	return query, nil
+}
+
+// LogOperationPageList is LogOperation PageList result.
+type LogOperationPageList struct {
+	List        []*LogOperation `json:"list"`
+	PageDetails *PageDetails    `json:"pageDetails"`
+}
+
+func (lo *LogOperationQuery) Page(
+	ctx context.Context, pageNum uint64, pageSize uint64, opts ...LogOperationPaginateOption,
+) (*LogOperationPageList, error) {
+
+	pager, err := newLogOperationPager(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	if lo, err = pager.ApplyFilter(lo); err != nil {
+		return nil, err
+	}
+
+	ret := &LogOperationPageList{}
+
+	ret.PageDetails = &PageDetails{
+		Page: pageNum,
+		Size: pageSize,
+	}
+
+	query := lo.Clone()
+	query.ctx.Fields = nil
+	count, err := query.Count(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret.PageDetails.Total = uint64(count)
+
+	if pager.Order != nil {
+		lo = lo.Order(pager.Order)
+	} else {
+		lo = lo.Order(DefaultLogOperationOrder)
+	}
+
+	lo = lo.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
+	list, err := lo.All(ctx)
 	if err != nil {
 		return nil, err
 	}

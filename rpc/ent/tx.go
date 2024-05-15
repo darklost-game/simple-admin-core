@@ -22,6 +22,10 @@ type Tx struct {
 	Dictionary *DictionaryClient
 	// DictionaryDetail is the client for interacting with the DictionaryDetail builders.
 	DictionaryDetail *DictionaryDetailClient
+	// LogLogin is the client for interacting with the LogLogin builders.
+	LogLogin *LogLoginClient
+	// LogOperation is the client for interacting with the LogOperation builders.
+	LogOperation *LogOperationClient
 	// Menu is the client for interacting with the Menu builders.
 	Menu *MenuClient
 	// OauthProvider is the client for interacting with the OauthProvider builders.
@@ -169,6 +173,8 @@ func (tx *Tx) init() {
 	tx.Department = NewDepartmentClient(tx.config)
 	tx.Dictionary = NewDictionaryClient(tx.config)
 	tx.DictionaryDetail = NewDictionaryDetailClient(tx.config)
+	tx.LogLogin = NewLogLoginClient(tx.config)
+	tx.LogOperation = NewLogOperationClient(tx.config)
 	tx.Menu = NewMenuClient(tx.config)
 	tx.OauthProvider = NewOauthProviderClient(tx.config)
 	tx.Position = NewPositionClient(tx.config)

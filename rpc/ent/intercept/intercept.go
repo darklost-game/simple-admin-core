@@ -12,6 +12,8 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/ent/department"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/dictionary"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/dictionarydetail"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/loglogin"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/logoperation"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/menu"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/oauthprovider"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
@@ -183,6 +185,60 @@ func (f TraverseDictionaryDetail) Traverse(ctx context.Context, q ent.Query) err
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.DictionaryDetailQuery", q)
+}
+
+// The LogLoginFunc type is an adapter to allow the use of ordinary function as a Querier.
+type LogLoginFunc func(context.Context, *ent.LogLoginQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f LogLoginFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.LogLoginQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.LogLoginQuery", q)
+}
+
+// The TraverseLogLogin type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseLogLogin func(context.Context, *ent.LogLoginQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseLogLogin) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseLogLogin) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.LogLoginQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.LogLoginQuery", q)
+}
+
+// The LogOperationFunc type is an adapter to allow the use of ordinary function as a Querier.
+type LogOperationFunc func(context.Context, *ent.LogOperationQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f LogOperationFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.LogOperationQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.LogOperationQuery", q)
+}
+
+// The TraverseLogOperation type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseLogOperation func(context.Context, *ent.LogOperationQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseLogOperation) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseLogOperation) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.LogOperationQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.LogOperationQuery", q)
 }
 
 // The MenuFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -358,6 +414,10 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.DictionaryQuery, predicate.Dictionary, dictionary.OrderOption]{typ: ent.TypeDictionary, tq: q}, nil
 	case *ent.DictionaryDetailQuery:
 		return &query[*ent.DictionaryDetailQuery, predicate.DictionaryDetail, dictionarydetail.OrderOption]{typ: ent.TypeDictionaryDetail, tq: q}, nil
+	case *ent.LogLoginQuery:
+		return &query[*ent.LogLoginQuery, predicate.LogLogin, loglogin.OrderOption]{typ: ent.TypeLogLogin, tq: q}, nil
+	case *ent.LogOperationQuery:
+		return &query[*ent.LogOperationQuery, predicate.LogOperation, logoperation.OrderOption]{typ: ent.TypeLogOperation, tq: q}, nil
 	case *ent.MenuQuery:
 		return &query[*ent.MenuQuery, predicate.Menu, menu.OrderOption]{typ: ent.TypeMenu, tq: q}, nil
 	case *ent.OauthProviderQuery:

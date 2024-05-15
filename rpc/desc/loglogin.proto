@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+// LogLogin message
+
+message LogLoginInfo {
+  optional uint64 id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  //  User's UUID | 用户的UUID
+  optional string uuid = 4;
+  // Login type | 登录类型
+  optional string type = 5;
+  // Login Auth ID|登录认证ID
+  optional string auth_id = 6;
+  // IP address | IP地址
+  optional string ip = 7;
+  // Login location | 登录地点
+  optional string location = 8;
+  // Login device | 登录设备
+  optional string device = 9;
+  // Login browser | 登录浏览器
+  optional string browser = 10;
+  // Login OS | 登录操作系统
+  optional string os = 11;
+  // Login result | 登录结果
+  optional string result = 12;
+  // Login message | 登录消息
+  optional string message = 13;
+  // Login time | 登录时间
+  optional int64  login_at = 14;
+}
+
+message LogLoginListResp {
+  uint64 total = 1;
+  repeated LogLoginInfo data = 2;
+}
+
+message LogLoginListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string type = 3;
+  optional string auth_id = 4;
+  optional string ip = 5;
+}
+
+
+service Core {
+
+  // LogLogin management
+  // group: loglogin
+  rpc createLogLogin (LogLoginInfo) returns (BaseIDResp);
+  // group: loglogin
+  rpc updateLogLogin (LogLoginInfo) returns (BaseResp);
+  // group: loglogin
+  rpc getLogLoginList (LogLoginListReq) returns (LogLoginListResp);
+  // group: loglogin
+  rpc getLogLoginById (IDReq) returns (LogLoginInfo);
+  // group: loglogin
+  rpc deleteLogLogin (IDsReq) returns (BaseResp);
+
+
+}

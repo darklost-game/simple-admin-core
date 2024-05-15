@@ -32,6 +32,7 @@ type ServiceContext struct {
 	Trans       *i18n.Translator
 	Captcha     *base64Captcha.Captcha
 	BanRoleConf *banrole.BanRoleConf
+	Operation   rest.Middleware
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -71,6 +72,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	logx.Must(err)
 
 	svc.Authority = middleware.NewAuthorityMiddleware(cbn, rds, trans, svc.BanRoleConf).Handle
+	svc.Operation = middleware.NewOperationMiddleware(svc.CoreRpc).Handle
 
 	return svc
 }

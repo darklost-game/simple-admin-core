@@ -705,6 +705,582 @@ func (dd *DictionaryDetailCreate) SetNotNilDictionaryID(value *uint64) *Dictiona
 }
 
 // set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilUpdatedAt(value *time.Time) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetUpdatedAt(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilUpdatedAt(value *time.Time) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetUpdatedAt(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilUpdatedAt(value *time.Time) *LogLoginCreate {
+	if value != nil {
+		return ll.SetUpdatedAt(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilUUID(value *uuid.UUID) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetUUID(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilUUID(value *uuid.UUID) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetUUID(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilUUID(value *uuid.UUID) *LogLoginCreate {
+	if value != nil {
+		return ll.SetUUID(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilType(value *string) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetType(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilType(value *string) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetType(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilType(value *string) *LogLoginCreate {
+	if value != nil {
+		return ll.SetType(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilAuthID(value *string) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetAuthID(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilAuthID(value *string) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetAuthID(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilAuthID(value *string) *LogLoginCreate {
+	if value != nil {
+		return ll.SetAuthID(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilIP(value *string) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetIP(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilIP(value *string) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetIP(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilIP(value *string) *LogLoginCreate {
+	if value != nil {
+		return ll.SetIP(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilLocation(value *string) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetLocation(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilLocation(value *string) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetLocation(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilLocation(value *string) *LogLoginCreate {
+	if value != nil {
+		return ll.SetLocation(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilDevice(value *string) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetDevice(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilDevice(value *string) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetDevice(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilDevice(value *string) *LogLoginCreate {
+	if value != nil {
+		return ll.SetDevice(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilBrowser(value *string) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetBrowser(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilBrowser(value *string) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetBrowser(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilBrowser(value *string) *LogLoginCreate {
+	if value != nil {
+		return ll.SetBrowser(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilOs(value *string) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetOs(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilOs(value *string) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetOs(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilOs(value *string) *LogLoginCreate {
+	if value != nil {
+		return ll.SetOs(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilResult(value *string) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetResult(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilResult(value *string) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetResult(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilResult(value *string) *LogLoginCreate {
+	if value != nil {
+		return ll.SetResult(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilMessage(value *string) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetMessage(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilMessage(value *string) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetMessage(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilMessage(value *string) *LogLoginCreate {
+	if value != nil {
+		return ll.SetMessage(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdate) SetNotNilLoginAt(value *time.Time) *LogLoginUpdate {
+	if value != nil {
+		return ll.SetLoginAt(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginUpdateOne) SetNotNilLoginAt(value *time.Time) *LogLoginUpdateOne {
+	if value != nil {
+		return ll.SetLoginAt(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (ll *LogLoginCreate) SetNotNilLoginAt(value *time.Time) *LogLoginCreate {
+	if value != nil {
+		return ll.SetLoginAt(*value)
+	}
+	return ll
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilUpdatedAt(value *time.Time) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetUpdatedAt(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilUpdatedAt(value *time.Time) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetUpdatedAt(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilUpdatedAt(value *time.Time) *LogOperationCreate {
+	if value != nil {
+		return lo.SetUpdatedAt(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilUUID(value *uuid.UUID) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetUUID(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilUUID(value *uuid.UUID) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetUUID(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilUUID(value *uuid.UUID) *LogOperationCreate {
+	if value != nil {
+		return lo.SetUUID(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilMethod(value *string) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetMethod(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilMethod(value *string) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetMethod(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilMethod(value *string) *LogOperationCreate {
+	if value != nil {
+		return lo.SetMethod(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilPath(value *string) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetPath(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilPath(value *string) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetPath(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilPath(value *string) *LogOperationCreate {
+	if value != nil {
+		return lo.SetPath(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilHeaders(value *string) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetHeaders(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilHeaders(value *string) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetHeaders(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilHeaders(value *string) *LogOperationCreate {
+	if value != nil {
+		return lo.SetHeaders(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilBody(value *string) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetBody(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilBody(value *string) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetBody(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilBody(value *string) *LogOperationCreate {
+	if value != nil {
+		return lo.SetBody(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilStatusCode(value *int) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetStatusCode(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilStatusCode(value *int) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetStatusCode(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilStatusCode(value *int) *LogOperationCreate {
+	if value != nil {
+		return lo.SetStatusCode(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilResHeaders(value *string) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetResHeaders(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilResHeaders(value *string) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetResHeaders(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilResHeaders(value *string) *LogOperationCreate {
+	if value != nil {
+		return lo.SetResHeaders(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilResBody(value *string) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetResBody(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilResBody(value *string) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetResBody(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilResBody(value *string) *LogOperationCreate {
+	if value != nil {
+		return lo.SetResBody(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilReqTime(value *time.Time) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetReqTime(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilReqTime(value *time.Time) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetReqTime(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilReqTime(value *time.Time) *LogOperationCreate {
+	if value != nil {
+		return lo.SetReqTime(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilResTime(value *time.Time) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetResTime(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilResTime(value *time.Time) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetResTime(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilResTime(value *time.Time) *LogOperationCreate {
+	if value != nil {
+		return lo.SetResTime(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdate) SetNotNilCostTime(value *uint64) *LogOperationUpdate {
+	if value != nil {
+		return lo.SetCostTime(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationUpdateOne) SetNotNilCostTime(value *uint64) *LogOperationUpdateOne {
+	if value != nil {
+		return lo.SetCostTime(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
+func (lo *LogOperationCreate) SetNotNilCostTime(value *uint64) *LogOperationCreate {
+	if value != nil {
+		return lo.SetCostTime(*value)
+	}
+	return lo
+}
+
+// set field if value's pointer is not nil.
 func (m *MenuUpdate) SetNotNilUpdatedAt(value *time.Time) *MenuUpdate {
 	if value != nil {
 		return m.SetUpdatedAt(*value)

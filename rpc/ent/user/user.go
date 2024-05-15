@@ -48,6 +48,10 @@ const (
 	EdgePositions = "positions"
 	// EdgeRoles holds the string denoting the roles edge name in mutations.
 	EdgeRoles = "roles"
+	// EdgeLogLogins holds the string denoting the log_logins edge name in mutations.
+	EdgeLogLogins = "log_logins"
+	// EdgeLogOperations holds the string denoting the log_operations edge name in mutations.
+	EdgeLogOperations = "log_operations"
 	// Table holds the table name of the user in the database.
 	Table = "sys_users"
 	// DepartmentsTable is the table that holds the departments relation/edge.
@@ -67,6 +71,20 @@ const (
 	// RolesInverseTable is the table name for the Role entity.
 	// It exists in this package in order to avoid circular dependency with the "role" package.
 	RolesInverseTable = "sys_roles"
+	// LogLoginsTable is the table that holds the log_logins relation/edge.
+	LogLoginsTable = "sys_log_logins"
+	// LogLoginsInverseTable is the table name for the LogLogin entity.
+	// It exists in this package in order to avoid circular dependency with the "loglogin" package.
+	LogLoginsInverseTable = "sys_log_logins"
+	// LogLoginsColumn is the table column denoting the log_logins relation/edge.
+	LogLoginsColumn = "uuid"
+	// LogOperationsTable is the table that holds the log_operations relation/edge.
+	LogOperationsTable = "sys_log_operations"
+	// LogOperationsInverseTable is the table name for the LogOperation entity.
+	// It exists in this package in order to avoid circular dependency with the "logoperation" package.
+	LogOperationsInverseTable = "sys_log_operations"
+	// LogOperationsColumn is the table column denoting the log_operations relation/edge.
+	LogOperationsColumn = "uuid"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -239,6 +257,34 @@ func ByRoles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newRolesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByLogLoginsCount orders the results by log_logins count.
+func ByLogLoginsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newLogLoginsStep(), opts...)
+	}
+}
+
+// ByLogLogins orders the results by log_logins terms.
+func ByLogLogins(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLogLoginsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByLogOperationsCount orders the results by log_operations count.
+func ByLogOperationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newLogOperationsStep(), opts...)
+	}
+}
+
+// ByLogOperations orders the results by log_operations terms.
+func ByLogOperations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLogOperationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newDepartmentsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -258,5 +304,19 @@ func newRolesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RolesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, RolesTable, RolesPrimaryKey...),
+	)
+}
+func newLogLoginsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LogLoginsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, LogLoginsTable, LogLoginsColumn),
+	)
+}
+func newLogOperationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LogOperationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, LogOperationsTable, LogOperationsColumn),
 	)
 }

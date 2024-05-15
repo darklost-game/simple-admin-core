@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/department"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/loglogin"
+	"github.com/suyuan32/simple-admin-core/rpc/ent/logoperation"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/position"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/role"
 	"github.com/suyuan32/simple-admin-core/rpc/ent/user"
@@ -245,6 +247,36 @@ func (uc *UserCreate) AddRoles(r ...*Role) *UserCreate {
 	return uc.AddRoleIDs(ids...)
 }
 
+// AddLogLoginIDs adds the "log_logins" edge to the LogLogin entity by IDs.
+func (uc *UserCreate) AddLogLoginIDs(ids ...uint64) *UserCreate {
+	uc.mutation.AddLogLoginIDs(ids...)
+	return uc
+}
+
+// AddLogLogins adds the "log_logins" edges to the LogLogin entity.
+func (uc *UserCreate) AddLogLogins(l ...*LogLogin) *UserCreate {
+	ids := make([]uint64, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return uc.AddLogLoginIDs(ids...)
+}
+
+// AddLogOperationIDs adds the "log_operations" edge to the LogOperation entity by IDs.
+func (uc *UserCreate) AddLogOperationIDs(ids ...uint64) *UserCreate {
+	uc.mutation.AddLogOperationIDs(ids...)
+	return uc
+}
+
+// AddLogOperations adds the "log_operations" edges to the LogOperation entity.
+func (uc *UserCreate) AddLogOperations(l ...*LogOperation) *UserCreate {
+	ids := make([]uint64, len(l))
+	for i := range l {
+		ids[i] = l[i].ID
+	}
+	return uc.AddLogOperationIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uc *UserCreate) Mutation() *UserMutation {
 	return uc.mutation
@@ -467,6 +499,38 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeUint64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.LogLoginsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogLoginsTable,
+			Columns: []string{user.LogLoginsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(loglogin.FieldID, field.TypeUint64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.LogOperationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.LogOperationsTable,
+			Columns: []string{user.LogOperationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(logoperation.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {

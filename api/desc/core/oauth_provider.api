@@ -126,7 +126,7 @@ service Core {
 @server(
     jwt: Auth
     group: oauthprovider
-    middleware: Authority
+    middleware: Operation,Authority
 )
 
 service Core {

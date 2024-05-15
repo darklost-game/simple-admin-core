@@ -57,6 +57,30 @@ func (f DictionaryDetailFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.V
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DictionaryDetailMutation", m)
 }
 
+// The LogLoginFunc type is an adapter to allow the use of ordinary
+// function as LogLogin mutator.
+type LogLoginFunc func(context.Context, *ent.LogLoginMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f LogLoginFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.LogLoginMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LogLoginMutation", m)
+}
+
+// The LogOperationFunc type is an adapter to allow the use of ordinary
+// function as LogOperation mutator.
+type LogOperationFunc func(context.Context, *ent.LogOperationMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f LogOperationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.LogOperationMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LogOperationMutation", m)
+}
+
 // The MenuFunc type is an adapter to allow the use of ordinary
 // function as Menu mutator.
 type MenuFunc func(context.Context, *ent.MenuMutation) (ent.Value, error)

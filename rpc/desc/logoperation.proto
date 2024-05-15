@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+// LogOperation message
+
+message LogOperationInfo {
+  optional uint64 id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  //  User's UUID | 用户的UUID
+  optional string uuid = 4;
+  // HTTP request method|HTTP请求方法
+  optional string method = 5;
+  // HTTP request path|HTTP请求路径
+  optional string path = 6;
+  // HTTP request headers|HTTP请求头部
+  optional string headers = 7;
+  // HTTP request body|HTTP请求体
+  optional string body = 8;
+  // HTTP response status code|HTTP响应状态码
+  optional int64 status_code = 9;
+  // HTTP response headers|HTTP响应头部
+  optional string res_headers = 10;
+  // HTTP response body|HTTP响应体
+  optional string res_body = 11;
+  // Time when the request was made|请求发起时间
+  optional int64  req_time = 12;
+  // Time when the response was received|响应接收时间
+  optional int64  res_time = 13;
+  // Cost time of the request in milliseconds|请求耗时（毫秒）
+  optional uint64 cost_time = 14;
+}
+
+message LogOperationListResp {
+  uint64 total = 1;
+  repeated LogOperationInfo data = 2;
+}
+
+message LogOperationListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string method = 3;
+  optional string path = 4;
+  optional string headers = 5;
+}
+
+
+service Core {
+
+  // LogOperation management
+  // group: logoperation
+  rpc createLogOperation (LogOperationInfo) returns (BaseIDResp);
+  // group: logoperation
+  rpc updateLogOperation (LogOperationInfo) returns (BaseResp);
+  // group: logoperation
+  rpc getLogOperationList (LogOperationListReq) returns (LogOperationListResp);
+  // group: logoperation
+  rpc getLogOperationById (IDReq) returns (LogOperationInfo);
+  // group: logoperation
+  rpc deleteLogOperation (IDsReq) returns (BaseResp);
+
+
+}
