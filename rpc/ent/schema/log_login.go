@@ -50,6 +50,7 @@ func (LogLogin) Fields() []ent.Field {
 			Comment("Login OS | 登录操作系统").
 			Annotations(entsql.WithComments(true)),
 		field.String("result").
+			Optional().
 			Comment("Login result | 登录结果").
 			Annotations(entsql.WithComments(true)),
 		field.String("message").

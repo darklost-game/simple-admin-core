@@ -192,6 +192,12 @@ func (llu *LogLoginUpdate) SetNillableResult(s *string) *LogLoginUpdate {
 	return llu
 }
 
+// ClearResult clears the value of the "result" field.
+func (llu *LogLoginUpdate) ClearResult() *LogLoginUpdate {
+	llu.mutation.ClearResult()
+	return llu
+}
+
 // SetMessage sets the "message" field.
 func (llu *LogLoginUpdate) SetMessage(s string) *LogLoginUpdate {
 	llu.mutation.SetMessage(s)
@@ -339,6 +345,9 @@ func (llu *LogLoginUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := llu.mutation.Result(); ok {
 		_spec.SetField(loglogin.FieldResult, field.TypeString, value)
+	}
+	if llu.mutation.ResultCleared() {
+		_spec.ClearField(loglogin.FieldResult, field.TypeString)
 	}
 	if value, ok := llu.mutation.Message(); ok {
 		_spec.SetField(loglogin.FieldMessage, field.TypeString, value)
@@ -560,6 +569,12 @@ func (lluo *LogLoginUpdateOne) SetNillableResult(s *string) *LogLoginUpdateOne {
 	return lluo
 }
 
+// ClearResult clears the value of the "result" field.
+func (lluo *LogLoginUpdateOne) ClearResult() *LogLoginUpdateOne {
+	lluo.mutation.ClearResult()
+	return lluo
+}
+
 // SetMessage sets the "message" field.
 func (lluo *LogLoginUpdateOne) SetMessage(s string) *LogLoginUpdateOne {
 	lluo.mutation.SetMessage(s)
@@ -737,6 +752,9 @@ func (lluo *LogLoginUpdateOne) sqlSave(ctx context.Context) (_node *LogLogin, er
 	}
 	if value, ok := lluo.mutation.Result(); ok {
 		_spec.SetField(loglogin.FieldResult, field.TypeString, value)
+	}
+	if lluo.mutation.ResultCleared() {
+		_spec.ClearField(loglogin.FieldResult, field.TypeString)
 	}
 	if value, ok := lluo.mutation.Message(); ok {
 		_spec.SetField(loglogin.FieldMessage, field.TypeString, value)

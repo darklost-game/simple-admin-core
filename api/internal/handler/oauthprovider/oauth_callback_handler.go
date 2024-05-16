@@ -21,7 +21,7 @@ import (
 func OauthCallbackHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := oauthprovider.NewOauthCallbackLogic(r, svcCtx)
-		resp, err := l.OauthCallback()
+		resp, err := l.OauthCallback(r)
 		if err != nil {
 			err = svcCtx.Trans.TransError(r.Context(), err)
 			httpx.ErrorCtx(r.Context(), w, err)

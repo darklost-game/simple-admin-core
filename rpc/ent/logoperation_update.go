@@ -133,40 +133,6 @@ func (lou *LogOperationUpdate) AddStatusCode(i int) *LogOperationUpdate {
 	return lou
 }
 
-// SetResHeaders sets the "res_headers" field.
-func (lou *LogOperationUpdate) SetResHeaders(s string) *LogOperationUpdate {
-	lou.mutation.SetResHeaders(s)
-	return lou
-}
-
-// SetNillableResHeaders sets the "res_headers" field if the given value is not nil.
-func (lou *LogOperationUpdate) SetNillableResHeaders(s *string) *LogOperationUpdate {
-	if s != nil {
-		lou.SetResHeaders(*s)
-	}
-	return lou
-}
-
-// SetResBody sets the "res_body" field.
-func (lou *LogOperationUpdate) SetResBody(s string) *LogOperationUpdate {
-	lou.mutation.SetResBody(s)
-	return lou
-}
-
-// SetNillableResBody sets the "res_body" field if the given value is not nil.
-func (lou *LogOperationUpdate) SetNillableResBody(s *string) *LogOperationUpdate {
-	if s != nil {
-		lou.SetResBody(*s)
-	}
-	return lou
-}
-
-// ClearResBody clears the value of the "res_body" field.
-func (lou *LogOperationUpdate) ClearResBody() *LogOperationUpdate {
-	lou.mutation.ClearResBody()
-	return lou
-}
-
 // SetReqTime sets the "req_time" field.
 func (lou *LogOperationUpdate) SetReqTime(t time.Time) *LogOperationUpdate {
 	lou.mutation.SetReqTime(t)
@@ -281,11 +247,6 @@ func (lou *LogOperationUpdate) check() error {
 			return &ValidationError{Name: "headers", err: fmt.Errorf(`ent: validator failed for field "LogOperation.headers": %w`, err)}
 		}
 	}
-	if v, ok := lou.mutation.ResHeaders(); ok {
-		if err := logoperation.ResHeadersValidator(v); err != nil {
-			return &ValidationError{Name: "res_headers", err: fmt.Errorf(`ent: validator failed for field "LogOperation.res_headers": %w`, err)}
-		}
-	}
 	if _, ok := lou.mutation.UserID(); lou.mutation.UserCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "LogOperation.user"`)
 	}
@@ -327,15 +288,6 @@ func (lou *LogOperationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := lou.mutation.AddedStatusCode(); ok {
 		_spec.AddField(logoperation.FieldStatusCode, field.TypeInt, value)
-	}
-	if value, ok := lou.mutation.ResHeaders(); ok {
-		_spec.SetField(logoperation.FieldResHeaders, field.TypeString, value)
-	}
-	if value, ok := lou.mutation.ResBody(); ok {
-		_spec.SetField(logoperation.FieldResBody, field.TypeString, value)
-	}
-	if lou.mutation.ResBodyCleared() {
-		_spec.ClearField(logoperation.FieldResBody, field.TypeString)
 	}
 	if value, ok := lou.mutation.ReqTime(); ok {
 		_spec.SetField(logoperation.FieldReqTime, field.TypeTime, value)
@@ -501,40 +453,6 @@ func (louo *LogOperationUpdateOne) AddStatusCode(i int) *LogOperationUpdateOne {
 	return louo
 }
 
-// SetResHeaders sets the "res_headers" field.
-func (louo *LogOperationUpdateOne) SetResHeaders(s string) *LogOperationUpdateOne {
-	louo.mutation.SetResHeaders(s)
-	return louo
-}
-
-// SetNillableResHeaders sets the "res_headers" field if the given value is not nil.
-func (louo *LogOperationUpdateOne) SetNillableResHeaders(s *string) *LogOperationUpdateOne {
-	if s != nil {
-		louo.SetResHeaders(*s)
-	}
-	return louo
-}
-
-// SetResBody sets the "res_body" field.
-func (louo *LogOperationUpdateOne) SetResBody(s string) *LogOperationUpdateOne {
-	louo.mutation.SetResBody(s)
-	return louo
-}
-
-// SetNillableResBody sets the "res_body" field if the given value is not nil.
-func (louo *LogOperationUpdateOne) SetNillableResBody(s *string) *LogOperationUpdateOne {
-	if s != nil {
-		louo.SetResBody(*s)
-	}
-	return louo
-}
-
-// ClearResBody clears the value of the "res_body" field.
-func (louo *LogOperationUpdateOne) ClearResBody() *LogOperationUpdateOne {
-	louo.mutation.ClearResBody()
-	return louo
-}
-
 // SetReqTime sets the "req_time" field.
 func (louo *LogOperationUpdateOne) SetReqTime(t time.Time) *LogOperationUpdateOne {
 	louo.mutation.SetReqTime(t)
@@ -662,11 +580,6 @@ func (louo *LogOperationUpdateOne) check() error {
 			return &ValidationError{Name: "headers", err: fmt.Errorf(`ent: validator failed for field "LogOperation.headers": %w`, err)}
 		}
 	}
-	if v, ok := louo.mutation.ResHeaders(); ok {
-		if err := logoperation.ResHeadersValidator(v); err != nil {
-			return &ValidationError{Name: "res_headers", err: fmt.Errorf(`ent: validator failed for field "LogOperation.res_headers": %w`, err)}
-		}
-	}
 	if _, ok := louo.mutation.UserID(); louo.mutation.UserCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "LogOperation.user"`)
 	}
@@ -725,15 +638,6 @@ func (louo *LogOperationUpdateOne) sqlSave(ctx context.Context) (_node *LogOpera
 	}
 	if value, ok := louo.mutation.AddedStatusCode(); ok {
 		_spec.AddField(logoperation.FieldStatusCode, field.TypeInt, value)
-	}
-	if value, ok := louo.mutation.ResHeaders(); ok {
-		_spec.SetField(logoperation.FieldResHeaders, field.TypeString, value)
-	}
-	if value, ok := louo.mutation.ResBody(); ok {
-		_spec.SetField(logoperation.FieldResBody, field.TypeString, value)
-	}
-	if louo.mutation.ResBodyCleared() {
-		_spec.ClearField(logoperation.FieldResBody, field.TypeString)
 	}
 	if value, ok := louo.mutation.ReqTime(); ok {
 		_spec.SetField(logoperation.FieldReqTime, field.TypeTime, value)

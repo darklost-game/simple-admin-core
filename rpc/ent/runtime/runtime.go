@@ -169,16 +169,12 @@ func init() {
 	logoperationDescHeaders := logoperationFields[3].Descriptor()
 	// logoperation.HeadersValidator is a validator for the "headers" field. It is called by the builders before save.
 	logoperation.HeadersValidator = logoperationDescHeaders.Validators[0].(func(string) error)
-	// logoperationDescResHeaders is the schema descriptor for res_headers field.
-	logoperationDescResHeaders := logoperationFields[6].Descriptor()
-	// logoperation.ResHeadersValidator is a validator for the "res_headers" field. It is called by the builders before save.
-	logoperation.ResHeadersValidator = logoperationDescResHeaders.Validators[0].(func(string) error)
 	// logoperationDescReqTime is the schema descriptor for req_time field.
-	logoperationDescReqTime := logoperationFields[8].Descriptor()
+	logoperationDescReqTime := logoperationFields[6].Descriptor()
 	// logoperation.DefaultReqTime holds the default value on creation for the req_time field.
 	logoperation.DefaultReqTime = logoperationDescReqTime.Default.(func() time.Time)
 	// logoperationDescResTime is the schema descriptor for res_time field.
-	logoperationDescResTime := logoperationFields[9].Descriptor()
+	logoperationDescResTime := logoperationFields[7].Descriptor()
 	// logoperation.DefaultResTime holds the default value on creation for the res_time field.
 	logoperation.DefaultResTime = logoperationDescResTime.Default.(func() time.Time)
 	menuMixin := schema.Menu{}.Mixin()

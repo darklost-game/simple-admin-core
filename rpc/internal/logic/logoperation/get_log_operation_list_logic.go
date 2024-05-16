@@ -10,7 +10,7 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
 
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
-	"github.com/zeromicro/go-zero/core/logx"
+    "github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetLogOperationListLogic struct {
@@ -49,20 +49,18 @@ func (l *GetLogOperationListLogic) GetLogOperationList(in *core.LogOperationList
 
 	for _, v := range result.List {
 		resp.Data = append(resp.Data, &core.LogOperationInfo{
-			Id:         &v.ID,
-			CreatedAt:  pointy.GetPointer(v.CreatedAt.UnixMilli()),
-			UpdatedAt:  pointy.GetPointer(v.UpdatedAt.UnixMilli()),
-			Uuid:       pointy.GetPointer(v.UUID.String()),
-			Method:     &v.Method,
-			Path:       &v.Path,
-			Headers:    &v.Headers,
-			Body:       &v.Body,
-			StatusCode: pointy.GetPointer(int64(v.StatusCode)),
-			ResHeaders: &v.ResHeaders,
-			ResBody:    &v.ResBody,
-			ReqTime:    pointy.GetPointer(v.ReqTime.UnixMilli()),
-			ResTime:    pointy.GetPointer(v.ResTime.UnixMilli()),
-			CostTime:   &v.CostTime,
+			Id:          &v.ID,
+			CreatedAt:   pointy.GetPointer(v.CreatedAt.UnixMilli()),
+			UpdatedAt:   pointy.GetPointer(v.UpdatedAt.UnixMilli()),
+			Uuid:	pointy.GetPointer(v.UUID.String()),
+			Method:	&v.Method,
+			Path:	&v.Path,
+			Headers:	&v.Headers,
+			Body:	&v.Body,
+			StatusCode:	pointy.GetPointer(int64(v.StatusCode)),
+			ReqTime:	pointy.GetPointer(v.ReqTime.UnixMilli()),
+			ResTime:	pointy.GetPointer(v.ResTime.UnixMilli()),
+			CostTime:	&v.CostTime,
 		})
 	}
 

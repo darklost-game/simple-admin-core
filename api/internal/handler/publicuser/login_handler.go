@@ -32,9 +32,8 @@ func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
-
 		l := publicuser.NewLoginLogic(r.Context(), svcCtx)
-		resp, err := l.Login(&req)
+		resp, err := l.Login(&req, r)
 		if err != nil {
 			err = svcCtx.Trans.TransError(r.Context(), err)
 			httpx.ErrorCtx(r.Context(), w, err)

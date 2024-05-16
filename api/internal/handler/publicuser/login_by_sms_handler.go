@@ -34,7 +34,7 @@ func LoginBySmsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := publicuser.NewLoginBySmsLogic(r.Context(), svcCtx)
-		resp, err := l.LoginBySms(&req)
+		resp, err := l.LoginBySms(&req, r)
 		if err != nil {
 			err = svcCtx.Trans.TransError(r.Context(), err)
 			httpx.ErrorCtx(r.Context(), w, err)

@@ -144,6 +144,14 @@ func (llc *LogLoginCreate) SetResult(s string) *LogLoginCreate {
 	return llc
 }
 
+// SetNillableResult sets the "result" field if the given value is not nil.
+func (llc *LogLoginCreate) SetNillableResult(s *string) *LogLoginCreate {
+	if s != nil {
+		llc.SetResult(*s)
+	}
+	return llc
+}
+
 // SetMessage sets the "message" field.
 func (llc *LogLoginCreate) SetMessage(s string) *LogLoginCreate {
 	llc.mutation.SetMessage(s)
@@ -262,9 +270,6 @@ func (llc *LogLoginCreate) check() error {
 	}
 	if _, ok := llc.mutation.IP(); !ok {
 		return &ValidationError{Name: "ip", err: errors.New(`ent: missing required field "LogLogin.ip"`)}
-	}
-	if _, ok := llc.mutation.Result(); !ok {
-		return &ValidationError{Name: "result", err: errors.New(`ent: missing required field "LogLogin.result"`)}
 	}
 	if _, ok := llc.mutation.LoginAt(); !ok {
 		return &ValidationError{Name: "login_at", err: errors.New(`ent: missing required field "LogLogin.login_at"`)}

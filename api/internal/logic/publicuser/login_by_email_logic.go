@@ -2,6 +2,7 @@ package publicuser
 
 import (
 	"context"
+	"net/http"
 	"strings"
 	"time"
 
@@ -12,7 +13,9 @@ import (
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
 	"github.com/zeromicro/go-zero/core/errorx"
+	"github.com/zeromicro/go-zero/rest/httpx"
 
+	"github.com/suyuan32/simple-admin-core/api/internal/enum"
 	"github.com/suyuan32/simple-admin-core/api/internal/svc"
 	"github.com/suyuan32/simple-admin-core/api/internal/types"
 
@@ -32,7 +35,7 @@ func NewLoginByEmailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Logi
 		svcCtx: svcCtx}
 }
 
-func (l *LoginByEmailLogic) LoginByEmail(req *types.LoginByEmailReq) (resp *types.LoginResp, err error) {
+func (l *LoginByEmailLogic) LoginByEmail(req *types.LoginByEmailReq, r *http.Request) (resp *types.LoginResp, err error) {
 	if l.svcCtx.Config.ProjectConf.LoginVerify != "email" && l.svcCtx.Config.ProjectConf.LoginVerify != "sms_or_email" &&
 		l.svcCtx.Config.ProjectConf.LoginVerify != "all" {
 		return nil, errorx.NewCodeAbortedError("login.loginTypeForbidden")
@@ -100,6 +103,13 @@ func (l *LoginByEmailLogic) LoginByEmail(req *types.LoginByEmailReq) (resp *type
 				Expire: uint64(expiredAt),
 			},
 		}
+		LogLogin(l.ctx, l.svcCtx, &core.LogLoginInfo{
+			Uuid:    userData.Data[0].Id,
+			Ip:      pointy.GetPointer(httpx.GetRemoteAddr(r)),
+			Type:    pointy.GetPointer(enum.LOGINTYPE_EMAIL.String()),
+			AuthId:  pointy.GetPointer(req.Email),
+			LoginAt: pointy.GetPointer(time.Now().UnixMilli()),
+		})
 		return resp, nil
 	} else {
 		return nil, errorx.NewCodeInvalidArgumentError("login.wrongCaptcha")

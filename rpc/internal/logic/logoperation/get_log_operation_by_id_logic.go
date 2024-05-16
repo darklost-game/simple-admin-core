@@ -32,19 +32,18 @@ func (l *GetLogOperationByIdLogic) GetLogOperationById(in *core.IDReq) (*core.Lo
 	}
 
 	return &core.LogOperationInfo{
-		Id:         &result.ID,
-		CreatedAt:  pointy.GetPointer(result.CreatedAt.UnixMilli()),
-		UpdatedAt:  pointy.GetPointer(result.UpdatedAt.UnixMilli()),
-		Uuid:       pointy.GetPointer(result.UUID.String()),
-		Method:     &result.Method,
-		Path:       &result.Path,
-		Headers:    &result.Headers,
-		Body:       &result.Body,
-		StatusCode: pointy.GetPointer(int64(result.StatusCode)),
-		ResHeaders: &result.ResHeaders,
-		ResBody:    &result.ResBody,
-		ReqTime:    pointy.GetPointer(result.ReqTime.UnixMilli()),
-		ResTime:    pointy.GetPointer(result.ResTime.UnixMilli()),
-		CostTime:   &result.CostTime,
+		Id:          &result.ID,
+		CreatedAt:    pointy.GetPointer(result.CreatedAt.UnixMilli()),
+		UpdatedAt:    pointy.GetPointer(result.UpdatedAt.UnixMilli()),
+		Uuid:	pointy.GetPointer(result.UUID.String()),
+		Method:	&result.Method,
+		Path:	&result.Path,
+		Headers:	&result.Headers,
+		Body:	&result.Body,
+		StatusCode:	pointy.GetPointer(int64(result.StatusCode)),
+		ReqTime:	pointy.GetPointer(result.ReqTime.UnixMilli()),
+		ResTime:	pointy.GetPointer(result.ResTime.UnixMilli()),
+		CostTime:	&result.CostTime,
 	}, nil
 }
+

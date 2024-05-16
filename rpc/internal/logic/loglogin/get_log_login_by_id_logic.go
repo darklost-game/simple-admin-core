@@ -32,19 +32,20 @@ func (l *GetLogLoginByIdLogic) GetLogLoginById(in *core.IDReq) (*core.LogLoginIn
 	}
 
 	return &core.LogLoginInfo{
-		Id:        &result.ID,
-		CreatedAt: pointy.GetPointer(result.CreatedAt.UnixMilli()),
-		UpdatedAt: pointy.GetPointer(result.UpdatedAt.UnixMilli()),
-		Uuid:      pointy.GetPointer(result.UUID.String()),
-		Type:      &result.Type,
-		AuthId:    &result.AuthID,
-		Ip:        &result.IP,
-		Location:  &result.Location,
-		Device:    &result.Device,
-		Browser:   &result.Browser,
-		Os:        &result.Os,
-		Result:    &result.Result,
-		Message:   &result.Message,
-		LoginAt:   pointy.GetPointer(result.LoginAt.UnixMilli()),
+		Id:          &result.ID,
+		CreatedAt:    pointy.GetPointer(result.CreatedAt.UnixMilli()),
+		UpdatedAt:    pointy.GetPointer(result.UpdatedAt.UnixMilli()),
+		Uuid:	pointy.GetPointer(result.UUID.String()),
+		Type:	&result.Type,
+		AuthId:	&result.AuthID,
+		Ip:	&result.IP,
+		Location:	&result.Location,
+		Device:	&result.Device,
+		Browser:	&result.Browser,
+		Os:	&result.Os,
+		Result:	&result.Result,
+		Message:	&result.Message,
+		LoginAt:	pointy.GetPointer(result.LoginAt.UnixMilli()),
 	}, nil
 }
+

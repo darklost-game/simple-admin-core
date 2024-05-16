@@ -117,7 +117,7 @@ var (
 		{Name: "device", Type: field.TypeString, Nullable: true, Comment: "Login device | 登录设备"},
 		{Name: "browser", Type: field.TypeString, Nullable: true, Comment: "Login browser | 登录浏览器"},
 		{Name: "os", Type: field.TypeString, Nullable: true, Comment: "Login OS | 登录操作系统"},
-		{Name: "result", Type: field.TypeString, Comment: "Login result | 登录结果"},
+		{Name: "result", Type: field.TypeString, Nullable: true, Comment: "Login result | 登录结果"},
 		{Name: "message", Type: field.TypeString, Nullable: true, Comment: "Login message | 登录消息"},
 		{Name: "login_at", Type: field.TypeTime, Comment: "Login time | 登录时间"},
 		{Name: "uuid", Type: field.TypeUUID, Nullable: true, Comment: " User's UUID | 用户的UUID"},
@@ -174,8 +174,6 @@ var (
 		{Name: "headers", Type: field.TypeString, Size: 2048, Comment: "HTTP request headers|HTTP请求头部"},
 		{Name: "body", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "HTTP request body|HTTP请求体"},
 		{Name: "status_code", Type: field.TypeInt, Comment: "HTTP response status code|HTTP响应状态码"},
-		{Name: "res_headers", Type: field.TypeString, Size: 2048, Comment: "HTTP response headers|HTTP响应头部"},
-		{Name: "res_body", Type: field.TypeString, Nullable: true, Size: 2147483647, Comment: "HTTP response body|HTTP响应体"},
 		{Name: "req_time", Type: field.TypeTime, Comment: "Time when the request was made|请求发起时间"},
 		{Name: "res_time", Type: field.TypeTime, Comment: "Time when the response was received|响应接收时间"},
 		{Name: "cost_time", Type: field.TypeUint64, Comment: "Cost time of the request in milliseconds|请求耗时（毫秒）"},
@@ -190,7 +188,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sys_log_operations_sys_users_log_operations",
-				Columns:    []*schema.Column{SysLogOperationsColumns[13]},
+				Columns:    []*schema.Column{SysLogOperationsColumns[11]},
 				RefColumns: []*schema.Column{SysUsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -199,17 +197,17 @@ var (
 			{
 				Name:    "logoperation_req_time",
 				Unique:  false,
-				Columns: []*schema.Column{SysLogOperationsColumns[10]},
+				Columns: []*schema.Column{SysLogOperationsColumns[8]},
 			},
 			{
 				Name:    "logoperation_uuid",
 				Unique:  false,
-				Columns: []*schema.Column{SysLogOperationsColumns[13]},
+				Columns: []*schema.Column{SysLogOperationsColumns[11]},
 			},
 			{
 				Name:    "logoperation_uuid_req_time",
 				Unique:  false,
-				Columns: []*schema.Column{SysLogOperationsColumns[13], SysLogOperationsColumns[10]},
+				Columns: []*schema.Column{SysLogOperationsColumns[11], SysLogOperationsColumns[8]},
 			},
 		},
 	}

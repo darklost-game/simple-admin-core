@@ -18,16 +18,12 @@ message LogOperationInfo {
   optional string body = 8;
   // HTTP response status code|HTTP响应状态码
   optional int64 status_code = 9;
-  // HTTP response headers|HTTP响应头部
-  optional string res_headers = 10;
-  // HTTP response body|HTTP响应体
-  optional string res_body = 11;
   // Time when the request was made|请求发起时间
-  optional int64  req_time = 12;
+  optional int64  req_time = 10;
   // Time when the response was received|响应接收时间
-  optional int64  res_time = 13;
+  optional int64  res_time = 11;
   // Cost time of the request in milliseconds|请求耗时（毫秒）
-  optional uint64 cost_time = 14;
+  optional uint64 cost_time = 12;
 }
 
 message LogOperationListResp {

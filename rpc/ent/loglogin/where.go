@@ -781,6 +781,16 @@ func ResultHasSuffix(v string) predicate.LogLogin {
 	return predicate.LogLogin(sql.FieldHasSuffix(FieldResult, v))
 }
 
+// ResultIsNil applies the IsNil predicate on the "result" field.
+func ResultIsNil() predicate.LogLogin {
+	return predicate.LogLogin(sql.FieldIsNull(FieldResult))
+}
+
+// ResultNotNil applies the NotNil predicate on the "result" field.
+func ResultNotNil() predicate.LogLogin {
+	return predicate.LogLogin(sql.FieldNotNull(FieldResult))
+}
+
 // ResultEqualFold applies the EqualFold predicate on the "result" field.
 func ResultEqualFold(v string) predicate.LogLogin {
 	return predicate.LogLogin(sql.FieldEqualFold(FieldResult, v))

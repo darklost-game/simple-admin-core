@@ -1161,54 +1161,6 @@ func (lo *LogOperationCreate) SetNotNilStatusCode(value *int) *LogOperationCreat
 }
 
 // set field if value's pointer is not nil.
-func (lo *LogOperationUpdate) SetNotNilResHeaders(value *string) *LogOperationUpdate {
-	if value != nil {
-		return lo.SetResHeaders(*value)
-	}
-	return lo
-}
-
-// set field if value's pointer is not nil.
-func (lo *LogOperationUpdateOne) SetNotNilResHeaders(value *string) *LogOperationUpdateOne {
-	if value != nil {
-		return lo.SetResHeaders(*value)
-	}
-	return lo
-}
-
-// set field if value's pointer is not nil.
-func (lo *LogOperationCreate) SetNotNilResHeaders(value *string) *LogOperationCreate {
-	if value != nil {
-		return lo.SetResHeaders(*value)
-	}
-	return lo
-}
-
-// set field if value's pointer is not nil.
-func (lo *LogOperationUpdate) SetNotNilResBody(value *string) *LogOperationUpdate {
-	if value != nil {
-		return lo.SetResBody(*value)
-	}
-	return lo
-}
-
-// set field if value's pointer is not nil.
-func (lo *LogOperationUpdateOne) SetNotNilResBody(value *string) *LogOperationUpdateOne {
-	if value != nil {
-		return lo.SetResBody(*value)
-	}
-	return lo
-}
-
-// set field if value's pointer is not nil.
-func (lo *LogOperationCreate) SetNotNilResBody(value *string) *LogOperationCreate {
-	if value != nil {
-		return lo.SetResBody(*value)
-	}
-	return lo
-}
-
-// set field if value's pointer is not nil.
 func (lo *LogOperationUpdate) SetNotNilReqTime(value *time.Time) *LogOperationUpdate {
 	if value != nil {
 		return lo.SetReqTime(*value)

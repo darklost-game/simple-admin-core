@@ -4250,9 +4250,22 @@ func (m *LogLoginMutation) OldResult(ctx context.Context) (v string, err error) 
 	return oldValue.Result, nil
 }
 
+// ClearResult clears the value of the "result" field.
+func (m *LogLoginMutation) ClearResult() {
+	m.result = nil
+	m.clearedFields[loglogin.FieldResult] = struct{}{}
+}
+
+// ResultCleared returns if the "result" field was cleared in this mutation.
+func (m *LogLoginMutation) ResultCleared() bool {
+	_, ok := m.clearedFields[loglogin.FieldResult]
+	return ok
+}
+
 // ResetResult resets all changes to the "result" field.
 func (m *LogLoginMutation) ResetResult() {
 	m.result = nil
+	delete(m.clearedFields, loglogin.FieldResult)
 }
 
 // SetMessage sets the "message" field.
@@ -4668,6 +4681,9 @@ func (m *LogLoginMutation) ClearedFields() []string {
 	if m.FieldCleared(loglogin.FieldOs) {
 		fields = append(fields, loglogin.FieldOs)
 	}
+	if m.FieldCleared(loglogin.FieldResult) {
+		fields = append(fields, loglogin.FieldResult)
+	}
 	if m.FieldCleared(loglogin.FieldMessage) {
 		fields = append(fields, loglogin.FieldMessage)
 	}
@@ -4699,6 +4715,9 @@ func (m *LogLoginMutation) ClearField(name string) error {
 		return nil
 	case loglogin.FieldOs:
 		m.ClearOs()
+		return nil
+	case loglogin.FieldResult:
+		m.ClearResult()
 		return nil
 	case loglogin.FieldMessage:
 		m.ClearMessage()
@@ -4842,8 +4861,6 @@ type LogOperationMutation struct {
 	body           *string
 	status_code    *int
 	addstatus_code *int
-	res_headers    *string
-	res_body       *string
 	req_time       *time.Time
 	res_time       *time.Time
 	cost_time      *uint64
@@ -5281,91 +5298,6 @@ func (m *LogOperationMutation) ResetStatusCode() {
 	m.addstatus_code = nil
 }
 
-// SetResHeaders sets the "res_headers" field.
-func (m *LogOperationMutation) SetResHeaders(s string) {
-	m.res_headers = &s
-}
-
-// ResHeaders returns the value of the "res_headers" field in the mutation.
-func (m *LogOperationMutation) ResHeaders() (r string, exists bool) {
-	v := m.res_headers
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldResHeaders returns the old "res_headers" field's value of the LogOperation entity.
-// If the LogOperation object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LogOperationMutation) OldResHeaders(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldResHeaders is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldResHeaders requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldResHeaders: %w", err)
-	}
-	return oldValue.ResHeaders, nil
-}
-
-// ResetResHeaders resets all changes to the "res_headers" field.
-func (m *LogOperationMutation) ResetResHeaders() {
-	m.res_headers = nil
-}
-
-// SetResBody sets the "res_body" field.
-func (m *LogOperationMutation) SetResBody(s string) {
-	m.res_body = &s
-}
-
-// ResBody returns the value of the "res_body" field in the mutation.
-func (m *LogOperationMutation) ResBody() (r string, exists bool) {
-	v := m.res_body
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldResBody returns the old "res_body" field's value of the LogOperation entity.
-// If the LogOperation object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *LogOperationMutation) OldResBody(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldResBody is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldResBody requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldResBody: %w", err)
-	}
-	return oldValue.ResBody, nil
-}
-
-// ClearResBody clears the value of the "res_body" field.
-func (m *LogOperationMutation) ClearResBody() {
-	m.res_body = nil
-	m.clearedFields[logoperation.FieldResBody] = struct{}{}
-}
-
-// ResBodyCleared returns if the "res_body" field was cleared in this mutation.
-func (m *LogOperationMutation) ResBodyCleared() bool {
-	_, ok := m.clearedFields[logoperation.FieldResBody]
-	return ok
-}
-
-// ResetResBody resets all changes to the "res_body" field.
-func (m *LogOperationMutation) ResetResBody() {
-	m.res_body = nil
-	delete(m.clearedFields, logoperation.FieldResBody)
-}
-
 // SetReqTime sets the "req_time" field.
 func (m *LogOperationMutation) SetReqTime(t time.Time) {
 	m.req_time = &t
@@ -5568,7 +5500,7 @@ func (m *LogOperationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LogOperationMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, logoperation.FieldCreatedAt)
 	}
@@ -5592,12 +5524,6 @@ func (m *LogOperationMutation) Fields() []string {
 	}
 	if m.status_code != nil {
 		fields = append(fields, logoperation.FieldStatusCode)
-	}
-	if m.res_headers != nil {
-		fields = append(fields, logoperation.FieldResHeaders)
-	}
-	if m.res_body != nil {
-		fields = append(fields, logoperation.FieldResBody)
 	}
 	if m.req_time != nil {
 		fields = append(fields, logoperation.FieldReqTime)
@@ -5632,10 +5558,6 @@ func (m *LogOperationMutation) Field(name string) (ent.Value, bool) {
 		return m.Body()
 	case logoperation.FieldStatusCode:
 		return m.StatusCode()
-	case logoperation.FieldResHeaders:
-		return m.ResHeaders()
-	case logoperation.FieldResBody:
-		return m.ResBody()
 	case logoperation.FieldReqTime:
 		return m.ReqTime()
 	case logoperation.FieldResTime:
@@ -5667,10 +5589,6 @@ func (m *LogOperationMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldBody(ctx)
 	case logoperation.FieldStatusCode:
 		return m.OldStatusCode(ctx)
-	case logoperation.FieldResHeaders:
-		return m.OldResHeaders(ctx)
-	case logoperation.FieldResBody:
-		return m.OldResBody(ctx)
 	case logoperation.FieldReqTime:
 		return m.OldReqTime(ctx)
 	case logoperation.FieldResTime:
@@ -5741,20 +5659,6 @@ func (m *LogOperationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatusCode(v)
-		return nil
-	case logoperation.FieldResHeaders:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetResHeaders(v)
-		return nil
-	case logoperation.FieldResBody:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetResBody(v)
 		return nil
 	case logoperation.FieldReqTime:
 		v, ok := value.(time.Time)
@@ -5837,9 +5741,6 @@ func (m *LogOperationMutation) ClearedFields() []string {
 	if m.FieldCleared(logoperation.FieldBody) {
 		fields = append(fields, logoperation.FieldBody)
 	}
-	if m.FieldCleared(logoperation.FieldResBody) {
-		fields = append(fields, logoperation.FieldResBody)
-	}
 	return fields
 }
 
@@ -5856,9 +5757,6 @@ func (m *LogOperationMutation) ClearField(name string) error {
 	switch name {
 	case logoperation.FieldBody:
 		m.ClearBody()
-		return nil
-	case logoperation.FieldResBody:
-		m.ClearResBody()
 		return nil
 	}
 	return fmt.Errorf("unknown LogOperation nullable field %s", name)
@@ -5891,12 +5789,6 @@ func (m *LogOperationMutation) ResetField(name string) error {
 		return nil
 	case logoperation.FieldStatusCode:
 		m.ResetStatusCode()
-		return nil
-	case logoperation.FieldResHeaders:
-		m.ResetResHeaders()
-		return nil
-	case logoperation.FieldResBody:
-		m.ResetResBody()
 		return nil
 	case logoperation.FieldReqTime:
 		m.ResetReqTime()

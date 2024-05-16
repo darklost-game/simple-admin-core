@@ -2,6 +2,7 @@ package publicuser
 
 import (
 	"context"
+	"net/http"
 	"strings"
 	"time"
 
@@ -12,7 +13,9 @@ import (
 	"github.com/suyuan32/simple-admin-common/utils/jwt"
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
 	"github.com/zeromicro/go-zero/core/errorx"
+	"github.com/zeromicro/go-zero/rest/httpx"
 
+	"github.com/suyuan32/simple-admin-core/api/internal/enum"
 	"github.com/suyuan32/simple-admin-core/api/internal/svc"
 	"github.com/suyuan32/simple-admin-core/api/internal/types"
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
@@ -34,7 +37,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 	}
 }
 
-func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
+func (l *LoginLogic) Login(req *types.LoginReq, r *http.Request) (resp *types.LoginResp, err error) {
 	if l.svcCtx.Config.ProjectConf.LoginVerify != "captcha" && l.svcCtx.Config.ProjectConf.LoginVerify != "all" {
 		return nil, errorx.NewCodeAbortedError("login.loginTypeForbidden")
 	}
@@ -93,8 +96,26 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 				Expire: uint64(expiredAt),
 			},
 		}
+		LogLogin(l.ctx, l.svcCtx, &core.LogLoginInfo{
+			Uuid:    user.Id,
+			Ip:      pointy.GetPointer(httpx.GetRemoteAddr(r)),
+			Type:    pointy.GetPointer(enum.LOGINTYPE_USERNAME.String()),
+			AuthId:  pointy.GetPointer(req.Username),
+			LoginAt: pointy.GetPointer(time.Now().UnixMilli()),
+		})
 		return resp, nil
 	} else {
 		return nil, errorx.NewCodeInvalidArgumentError("login.wrongCaptcha")
 	}
+}
+
+// LogLogin log login|记录登录日志
+func LogLogin(ctx context.Context, svcCtx *svc.ServiceContext, info *core.LogLoginInfo) (err error) {
+	// log login
+	logx.Infow("log login", logx.Field("info", info))
+	_, err = svcCtx.CoreRpc.CreateLogLogin(ctx, info)
+	if err != nil {
+		logx.Errorw("create log login error", logx.Field("detail", err.Error()), logx.Field("info", info))
+	}
+	return err
 }

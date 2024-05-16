@@ -71,6 +71,10 @@ func (m *OperationMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		if err != nil {
 			headers = []byte("")
 		}
+		//超过 20148 则 截取请求头部
+		if len(headers) > 2048 {
+			headers = headers[:2048]
+		}
 		// // HTTP request body|HTTP请求体
 		// Body *string `protobuf:"bytes,8,opt,name=body,proto3,oneof" json:"body,omitempty"`
 		// 读取请求主体
@@ -96,29 +100,27 @@ func (m *OperationMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		// 计算请求耗时
 		costTime := resTime.Sub(reqTime).Milliseconds()
 
-		// // HTTP response status code|HTTP响应状态码
-		// StatusCode *int64 `protobuf:"varint,9,opt,name=status_code,json=statusCode,proto3,oneof" json:"status_code,omitempty"`
+		// // // HTTP response status code|HTTP响应状态码
+		// // StatusCode *int64 `protobuf:"varint,9,opt,name=status_code,json=statusCode,proto3,oneof" json:"status_code,omitempty"`
 		statusCode := recorder.statusCode
-		// // HTTP response headers|HTTP响应头部
-		// ResHeaders *string `protobuf:"bytes,10,opt,name=res_headers,json=resHeaders,proto3,oneof" json:"res_headers,omitempty"`
-		resHeaders, err := json.Marshal(recorder.Header())
-		if err != nil {
-			resHeaders = []byte("")
-		}
-		// // HTTP response body|HTTP响应体
-		// ResBody *string `protobuf:"bytes,11,opt,name=res_body,json=resBody,proto3,oneof" json:"res_body,omitempty"`
-		resBody := recorder.body
+		// // // HTTP response headers|HTTP响应头部
+		// // ResHeaders *string `protobuf:"bytes,10,opt,name=res_headers,json=resHeaders,proto3,oneof" json:"res_headers,omitempty"`
+		// resHeaders, err := json.Marshal(recorder.Header())
+		// if err != nil {
+		// 	resHeaders = []byte("")
+		// }
+		// // // HTTP response body|HTTP响应体
+		// // ResBody *string `protobuf:"bytes,11,opt,name=res_body,json=resBody,proto3,oneof" json:"res_body,omitempty"`
+		// resBody := recorder.body
 
 		// 记录操作日志
 		_, err = m.CoreRpc.CreateLogOperation(r.Context(), &core.LogOperationInfo{
-			Uuid:       &uuid,
-			Method:     &method,
-			Path:       &path,
+			Uuid:       pointy.GetPointer(uuid),
+			Method:     pointy.GetPointer(method),
+			Path:       pointy.GetPointer(path),
 			Headers:    pointy.GetPointer(string(headers)),
 			Body:       pointy.GetPointer(string(body)),
 			StatusCode: pointy.GetPointer(int64(statusCode)),
-			ResHeaders: pointy.GetPointer(string(resHeaders)),
-			ResBody:    pointy.GetPointer(string(resBody)),
 			ReqTime:    pointy.GetPointer(reqTime.UnixMilli()),
 			ResTime:    pointy.GetPointer(resTime.UnixMilli()),
 			CostTime:   pointy.GetPointer(uint64(costTime)),

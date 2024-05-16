@@ -30,10 +30,6 @@ const (
 	FieldBody = "body"
 	// FieldStatusCode holds the string denoting the status_code field in the database.
 	FieldStatusCode = "status_code"
-	// FieldResHeaders holds the string denoting the res_headers field in the database.
-	FieldResHeaders = "res_headers"
-	// FieldResBody holds the string denoting the res_body field in the database.
-	FieldResBody = "res_body"
 	// FieldReqTime holds the string denoting the req_time field in the database.
 	FieldReqTime = "req_time"
 	// FieldResTime holds the string denoting the res_time field in the database.
@@ -64,8 +60,6 @@ var Columns = []string{
 	FieldHeaders,
 	FieldBody,
 	FieldStatusCode,
-	FieldResHeaders,
-	FieldResBody,
 	FieldReqTime,
 	FieldResTime,
 	FieldCostTime,
@@ -90,8 +84,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// HeadersValidator is a validator for the "headers" field. It is called by the builders before save.
 	HeadersValidator func(string) error
-	// ResHeadersValidator is a validator for the "res_headers" field. It is called by the builders before save.
-	ResHeadersValidator func(string) error
 	// DefaultReqTime holds the default value on creation for the "req_time" field.
 	DefaultReqTime func() time.Time
 	// DefaultResTime holds the default value on creation for the "res_time" field.
@@ -144,16 +136,6 @@ func ByBody(opts ...sql.OrderTermOption) OrderOption {
 // ByStatusCode orders the results by the status_code field.
 func ByStatusCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatusCode, opts...).ToFunc()
-}
-
-// ByResHeaders orders the results by the res_headers field.
-func ByResHeaders(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldResHeaders, opts...).ToFunc()
-}
-
-// ByResBody orders the results by the res_body field.
-func ByResBody(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldResBody, opts...).ToFunc()
 }
 
 // ByReqTime orders the results by the req_time field.

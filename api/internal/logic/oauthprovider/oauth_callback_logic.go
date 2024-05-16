@@ -9,11 +9,14 @@ import (
 	"github.com/suyuan32/simple-admin-common/utils/jwt"
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
 
+	"github.com/suyuan32/simple-admin-core/api/internal/enum"
+	"github.com/suyuan32/simple-admin-core/api/internal/logic/publicuser"
 	"github.com/suyuan32/simple-admin-core/api/internal/svc"
 	"github.com/suyuan32/simple-admin-core/api/internal/types"
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 type OauthCallbackLogic struct {
@@ -32,7 +35,7 @@ func NewOauthCallbackLogic(r *http.Request, svcCtx *svc.ServiceContext) *OauthCa
 	}
 }
 
-func (l *OauthCallbackLogic) OauthCallback() (resp *types.CallbackResp, err error) {
+func (l *OauthCallbackLogic) OauthCallback(r *http.Request) (resp *types.CallbackResp, err error) {
 	result, err := l.svcCtx.CoreRpc.OauthCallback(l.ctx, &core.CallbackReq{
 		State: l.r.FormValue("state"),
 		Code:  l.r.FormValue("code"),
@@ -67,7 +70,13 @@ func (l *OauthCallbackLogic) OauthCallback() (resp *types.CallbackResp, err erro
 	if err != nil {
 		return nil, err
 	}
-
+	publicuser.LogLogin(l.ctx, l.svcCtx, &core.LogLoginInfo{
+		Uuid:    result.Id,
+		Ip:      pointy.GetPointer(httpx.GetRemoteAddr(r)),
+		Type:    pointy.GetPointer(enum.LOGINTYPE_OAUTH.String()),
+		AuthId:  result.Email,
+		LoginAt: pointy.GetPointer(time.Now().UnixMilli()),
+	})
 	return &types.CallbackResp{
 		UserId: *result.Id,
 		Token:  token,

@@ -10,7 +10,7 @@ import (
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
 
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
-	"github.com/zeromicro/go-zero/core/logx"
+    "github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetLogLoginListLogic struct {
@@ -49,20 +49,20 @@ func (l *GetLogLoginListLogic) GetLogLoginList(in *core.LogLoginListReq) (*core.
 
 	for _, v := range result.List {
 		resp.Data = append(resp.Data, &core.LogLoginInfo{
-			Id:        &v.ID,
-			CreatedAt: pointy.GetPointer(v.CreatedAt.UnixMilli()),
-			UpdatedAt: pointy.GetPointer(v.UpdatedAt.UnixMilli()),
-			Uuid:      pointy.GetPointer(v.UUID.String()),
-			Type:      &v.Type,
-			AuthId:    &v.AuthID,
-			Ip:        &v.IP,
-			Location:  &v.Location,
-			Device:    &v.Device,
-			Browser:   &v.Browser,
-			Os:        &v.Os,
-			Result:    &v.Result,
-			Message:   &v.Message,
-			LoginAt:   pointy.GetPointer(v.LoginAt.UnixMilli()),
+			Id:          &v.ID,
+			CreatedAt:   pointy.GetPointer(v.CreatedAt.UnixMilli()),
+			UpdatedAt:   pointy.GetPointer(v.UpdatedAt.UnixMilli()),
+			Uuid:	pointy.GetPointer(v.UUID.String()),
+			Type:	&v.Type,
+			AuthId:	&v.AuthID,
+			Ip:	&v.IP,
+			Location:	&v.Location,
+			Device:	&v.Device,
+			Browser:	&v.Browser,
+			Os:	&v.Os,
+			Result:	&v.Result,
+			Message:	&v.Message,
+			LoginAt:	pointy.GetPointer(v.LoginAt.UnixMilli()),
 		})
 	}
 

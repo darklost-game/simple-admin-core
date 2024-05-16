@@ -34,7 +34,7 @@ func LoginByEmailHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := publicuser.NewLoginByEmailLogic(r.Context(), svcCtx)
-		resp, err := l.LoginByEmail(&req)
+		resp, err := l.LoginByEmail(&req, r)
 		if err != nil {
 			err = svcCtx.Trans.TransError(r.Context(), err)
 			httpx.ErrorCtx(r.Context(), w, err)

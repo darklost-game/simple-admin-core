@@ -35,10 +35,6 @@ type LogOperation struct {
 	Body string `json:"body,omitempty"`
 	// HTTP response status code|HTTP响应状态码
 	StatusCode int `json:"status_code,omitempty"`
-	// HTTP response headers|HTTP响应头部
-	ResHeaders string `json:"res_headers,omitempty"`
-	// HTTP response body|HTTP响应体
-	ResBody string `json:"res_body,omitempty"`
 	// Time when the request was made|请求发起时间
 	ReqTime time.Time `json:"req_time,omitempty"`
 	// Time when the response was received|响应接收时间
@@ -78,7 +74,7 @@ func (*LogOperation) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case logoperation.FieldID, logoperation.FieldStatusCode, logoperation.FieldCostTime:
 			values[i] = new(sql.NullInt64)
-		case logoperation.FieldMethod, logoperation.FieldPath, logoperation.FieldHeaders, logoperation.FieldBody, logoperation.FieldResHeaders, logoperation.FieldResBody:
+		case logoperation.FieldMethod, logoperation.FieldPath, logoperation.FieldHeaders, logoperation.FieldBody:
 			values[i] = new(sql.NullString)
 		case logoperation.FieldCreatedAt, logoperation.FieldUpdatedAt, logoperation.FieldReqTime, logoperation.FieldResTime:
 			values[i] = new(sql.NullTime)
@@ -152,18 +148,6 @@ func (lo *LogOperation) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status_code", values[i])
 			} else if value.Valid {
 				lo.StatusCode = int(value.Int64)
-			}
-		case logoperation.FieldResHeaders:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field res_headers", values[i])
-			} else if value.Valid {
-				lo.ResHeaders = value.String
-			}
-		case logoperation.FieldResBody:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field res_body", values[i])
-			} else if value.Valid {
-				lo.ResBody = value.String
 			}
 		case logoperation.FieldReqTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -247,12 +231,6 @@ func (lo *LogOperation) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status_code=")
 	builder.WriteString(fmt.Sprintf("%v", lo.StatusCode))
-	builder.WriteString(", ")
-	builder.WriteString("res_headers=")
-	builder.WriteString(lo.ResHeaders)
-	builder.WriteString(", ")
-	builder.WriteString("res_body=")
-	builder.WriteString(lo.ResBody)
 	builder.WriteString(", ")
 	builder.WriteString("req_time=")
 	builder.WriteString(lo.ReqTime.Format(time.ANSIC))

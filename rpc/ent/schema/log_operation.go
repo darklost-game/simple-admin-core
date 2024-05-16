@@ -39,13 +39,6 @@ func (LogOperation) Fields() []ent.Field {
 		field.Int("status_code").
 			Comment("HTTP response status code|HTTP响应状态码").
 			Annotations(entsql.WithComments(true)),
-		field.String("res_headers").
-			MaxLen(2048).
-			Comment("HTTP response headers|HTTP响应头部").
-			Annotations(entsql.WithComments(true)),
-		field.Text("res_body").Optional().
-			Comment("HTTP response body|HTTP响应体").
-			Annotations(entsql.WithComments(true)),
 		field.Time("req_time").Default(time.Now).
 			Comment("Time when the request was made|请求发起时间").
 			Annotations(entsql.WithComments(true)),

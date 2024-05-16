@@ -94,26 +94,6 @@ func (loc *LogOperationCreate) SetStatusCode(i int) *LogOperationCreate {
 	return loc
 }
 
-// SetResHeaders sets the "res_headers" field.
-func (loc *LogOperationCreate) SetResHeaders(s string) *LogOperationCreate {
-	loc.mutation.SetResHeaders(s)
-	return loc
-}
-
-// SetResBody sets the "res_body" field.
-func (loc *LogOperationCreate) SetResBody(s string) *LogOperationCreate {
-	loc.mutation.SetResBody(s)
-	return loc
-}
-
-// SetNillableResBody sets the "res_body" field if the given value is not nil.
-func (loc *LogOperationCreate) SetNillableResBody(s *string) *LogOperationCreate {
-	if s != nil {
-		loc.SetResBody(*s)
-	}
-	return loc
-}
-
 // SetReqTime sets the "req_time" field.
 func (loc *LogOperationCreate) SetReqTime(t time.Time) *LogOperationCreate {
 	loc.mutation.SetReqTime(t)
@@ -246,14 +226,6 @@ func (loc *LogOperationCreate) check() error {
 	if _, ok := loc.mutation.StatusCode(); !ok {
 		return &ValidationError{Name: "status_code", err: errors.New(`ent: missing required field "LogOperation.status_code"`)}
 	}
-	if _, ok := loc.mutation.ResHeaders(); !ok {
-		return &ValidationError{Name: "res_headers", err: errors.New(`ent: missing required field "LogOperation.res_headers"`)}
-	}
-	if v, ok := loc.mutation.ResHeaders(); ok {
-		if err := logoperation.ResHeadersValidator(v); err != nil {
-			return &ValidationError{Name: "res_headers", err: fmt.Errorf(`ent: validator failed for field "LogOperation.res_headers": %w`, err)}
-		}
-	}
 	if _, ok := loc.mutation.ReqTime(); !ok {
 		return &ValidationError{Name: "req_time", err: errors.New(`ent: missing required field "LogOperation.req_time"`)}
 	}
@@ -325,14 +297,6 @@ func (loc *LogOperationCreate) createSpec() (*LogOperation, *sqlgraph.CreateSpec
 	if value, ok := loc.mutation.StatusCode(); ok {
 		_spec.SetField(logoperation.FieldStatusCode, field.TypeInt, value)
 		_node.StatusCode = value
-	}
-	if value, ok := loc.mutation.ResHeaders(); ok {
-		_spec.SetField(logoperation.FieldResHeaders, field.TypeString, value)
-		_node.ResHeaders = value
-	}
-	if value, ok := loc.mutation.ResBody(); ok {
-		_spec.SetField(logoperation.FieldResBody, field.TypeString, value)
-		_node.ResBody = value
 	}
 	if value, ok := loc.mutation.ReqTime(); ok {
 		_spec.SetField(logoperation.FieldReqTime, field.TypeTime, value)
