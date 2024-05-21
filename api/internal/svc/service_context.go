@@ -38,7 +38,7 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	rds := c.RedisConf.MustNewUniversalRedis()
 
-	cbn := c.CasbinConf.MustNewCasbinWithOriginalRedisWatcher(c.DatabaseConf.Type, c.DatabaseConf.GetDSN(),
+	cbn := c.CasbinConf.MustNewCasbinWithChannelRedisWatcher(c.DatabaseConf.Type, c.DatabaseConf.GetDSN(), "casbin_core",
 		c.RedisConf)
 
 	var trans *i18n.Translator
@@ -60,7 +60,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	}
 
 	//初始化管理平台banrole
-	svc.BanRoleConf = banrole.NewBanRoleConf(c.RedisConf, "/ban_role/admin", svc.LoadBanRoleData)
+	svc.BanRoleConf = banrole.NewBanRoleConf(c.RedisConf, "/ban_role/core", svc.LoadBanRoleData)
 	msg := &banrolewatcher.MSG{
 		Method: banrolewatcher.Update,
 		ID:     svc.BanRoleConf.Watcher.GetWatcherOptions().LocalID,
