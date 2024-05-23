@@ -35,6 +35,7 @@ func (l *GetApiListLogic) GetApiList(req *types.ApiListReq) (resp *types.ApiList
 			Description: req.Description,
 			Method:      req.Method,
 			ApiGroup:    req.Group,
+			IsRequired:  req.IsRequired,
 			ServiceName: req.ServiceName,
 		})
 	if err != nil {

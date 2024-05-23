@@ -44,6 +44,9 @@ func (l *GetApiListLogic) GetApiList(in *core.ApiListReq) (*core.ApiListResp, er
 	if in.Method != nil {
 		predicates = append(predicates, api.Method(*in.Method))
 	}
+	if in.IsRequired != nil {
+		predicates = append(predicates, api.IsRequired(*in.IsRequired))
+	}
 	if in.ServiceName != nil {
 		predicates = append(predicates, api.ServiceNameContains(*in.ServiceName))
 	}
