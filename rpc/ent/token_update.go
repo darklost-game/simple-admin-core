@@ -19,8 +19,9 @@ import (
 // TokenUpdate is the builder for updating Token entities.
 type TokenUpdate struct {
 	config
-	hooks    []Hook
-	mutation *TokenMutation
+	hooks     []Hook
+	mutation  *TokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the TokenUpdate builder.
@@ -173,6 +174,7 @@ func (tu *TokenUpdate) defaults() {
 	}
 }
 
+<<<<<<< HEAD
 // check runs all checks and user-defined validators on the builder.
 func (tu *TokenUpdate) check() error {
 	if v, ok := tu.mutation.Token(); ok {
@@ -181,6 +183,12 @@ func (tu *TokenUpdate) check() error {
 		}
 	}
 	return nil
+=======
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (tu *TokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TokenUpdate {
+	tu.modifiers = append(tu.modifiers, modifiers...)
+	return tu
+>>>>>>> effb2b519b019e425a77e70eba8d707b57b04e24
 }
 
 func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -222,6 +230,7 @@ func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := tu.mutation.ExpiredAt(); ok {
 		_spec.SetField(token.FieldExpiredAt, field.TypeTime, value)
 	}
+	_spec.AddModifiers(tu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{token.Label}
@@ -237,9 +246,10 @@ func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // TokenUpdateOne is the builder for updating a single Token entity.
 type TokenUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *TokenMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *TokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -399,6 +409,7 @@ func (tuo *TokenUpdateOne) defaults() {
 	}
 }
 
+<<<<<<< HEAD
 // check runs all checks and user-defined validators on the builder.
 func (tuo *TokenUpdateOne) check() error {
 	if v, ok := tuo.mutation.Token(); ok {
@@ -407,6 +418,12 @@ func (tuo *TokenUpdateOne) check() error {
 		}
 	}
 	return nil
+=======
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (tuo *TokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TokenUpdateOne {
+	tuo.modifiers = append(tuo.modifiers, modifiers...)
+	return tuo
+>>>>>>> effb2b519b019e425a77e70eba8d707b57b04e24
 }
 
 func (tuo *TokenUpdateOne) sqlSave(ctx context.Context) (_node *Token, err error) {
@@ -465,6 +482,7 @@ func (tuo *TokenUpdateOne) sqlSave(ctx context.Context) (_node *Token, err error
 	if value, ok := tuo.mutation.ExpiredAt(); ok {
 		_spec.SetField(token.FieldExpiredAt, field.TypeTime, value)
 	}
+	_spec.AddModifiers(tuo.modifiers...)
 	_node = &Token{config: tuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
