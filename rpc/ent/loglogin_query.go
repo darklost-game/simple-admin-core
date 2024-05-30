@@ -24,6 +24,7 @@ type LogLoginQuery struct {
 	inters     []Interceptor
 	predicates []predicate.LogLogin
 	withUser   *UserQuery
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -383,6 +384,9 @@ func (llq *LogLoginQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Lo
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	if len(llq.modifiers) > 0 {
+		_spec.Modifiers = llq.modifiers
+	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -433,6 +437,9 @@ func (llq *LogLoginQuery) loadUser(ctx context.Context, query *UserQuery, nodes 
 
 func (llq *LogLoginQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := llq.querySpec()
+	if len(llq.modifiers) > 0 {
+		_spec.Modifiers = llq.modifiers
+	}
 	_spec.Node.Columns = llq.ctx.Fields
 	if len(llq.ctx.Fields) > 0 {
 		_spec.Unique = llq.ctx.Unique != nil && *llq.ctx.Unique
@@ -498,6 +505,9 @@ func (llq *LogLoginQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if llq.ctx.Unique != nil && *llq.ctx.Unique {
 		selector.Distinct()
 	}
+	for _, m := range llq.modifiers {
+		m(selector)
+	}
 	for _, p := range llq.predicates {
 		p(selector)
 	}
@@ -513,6 +523,12 @@ func (llq *LogLoginQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (llq *LogLoginQuery) Modify(modifiers ...func(s *sql.Selector)) *LogLoginSelect {
+	llq.modifiers = append(llq.modifiers, modifiers...)
+	return llq.Select()
 }
 
 // LogLoginGroupBy is the group-by builder for LogLogin entities.
@@ -603,4 +619,10 @@ func (lls *LogLoginSelect) sqlScan(ctx context.Context, root *LogLoginQuery, v a
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (lls *LogLoginSelect) Modify(modifiers ...func(s *sql.Selector)) *LogLoginSelect {
+	lls.modifiers = append(lls.modifiers, modifiers...)
+	return lls
 }

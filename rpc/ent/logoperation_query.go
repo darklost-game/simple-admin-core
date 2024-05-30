@@ -24,6 +24,7 @@ type LogOperationQuery struct {
 	inters     []Interceptor
 	predicates []predicate.LogOperation
 	withUser   *UserQuery
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -383,6 +384,9 @@ func (loq *LogOperationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	if len(loq.modifiers) > 0 {
+		_spec.Modifiers = loq.modifiers
+	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -433,6 +437,9 @@ func (loq *LogOperationQuery) loadUser(ctx context.Context, query *UserQuery, no
 
 func (loq *LogOperationQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := loq.querySpec()
+	if len(loq.modifiers) > 0 {
+		_spec.Modifiers = loq.modifiers
+	}
 	_spec.Node.Columns = loq.ctx.Fields
 	if len(loq.ctx.Fields) > 0 {
 		_spec.Unique = loq.ctx.Unique != nil && *loq.ctx.Unique
@@ -498,6 +505,9 @@ func (loq *LogOperationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if loq.ctx.Unique != nil && *loq.ctx.Unique {
 		selector.Distinct()
 	}
+	for _, m := range loq.modifiers {
+		m(selector)
+	}
 	for _, p := range loq.predicates {
 		p(selector)
 	}
@@ -513,6 +523,12 @@ func (loq *LogOperationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (loq *LogOperationQuery) Modify(modifiers ...func(s *sql.Selector)) *LogOperationSelect {
+	loq.modifiers = append(loq.modifiers, modifiers...)
+	return loq.Select()
 }
 
 // LogOperationGroupBy is the group-by builder for LogOperation entities.
@@ -603,4 +619,10 @@ func (los *LogOperationSelect) sqlScan(ctx context.Context, root *LogOperationQu
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (los *LogOperationSelect) Modify(modifiers ...func(s *sql.Selector)) *LogOperationSelect {
+	los.modifiers = append(los.modifiers, modifiers...)
+	return los
 }

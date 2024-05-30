@@ -20,8 +20,9 @@ import (
 // LogLoginUpdate is the builder for updating LogLogin entities.
 type LogLoginUpdate struct {
 	config
-	hooks    []Hook
-	mutation *LogLoginMutation
+	hooks     []Hook
+	mutation  *LogLoginMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the LogLoginUpdate builder.
@@ -298,6 +299,12 @@ func (llu *LogLoginUpdate) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (llu *LogLoginUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *LogLoginUpdate {
+	llu.modifiers = append(llu.modifiers, modifiers...)
+	return llu
+}
+
 func (llu *LogLoginUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(loglogin.Table, loglogin.Columns, sqlgraph.NewFieldSpec(loglogin.FieldID, field.TypeUint64))
 	if ps := llu.mutation.predicates; len(ps) > 0 {
@@ -387,6 +394,7 @@ func (llu *LogLoginUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(llu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, llu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{loglogin.Label}
@@ -402,9 +410,10 @@ func (llu *LogLoginUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // LogLoginUpdateOne is the builder for updating a single LogLogin entity.
 type LogLoginUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *LogLoginMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *LogLoginMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -688,6 +697,12 @@ func (lluo *LogLoginUpdateOne) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (lluo *LogLoginUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *LogLoginUpdateOne {
+	lluo.modifiers = append(lluo.modifiers, modifiers...)
+	return lluo
+}
+
 func (lluo *LogLoginUpdateOne) sqlSave(ctx context.Context) (_node *LogLogin, err error) {
 	_spec := sqlgraph.NewUpdateSpec(loglogin.Table, loglogin.Columns, sqlgraph.NewFieldSpec(loglogin.FieldID, field.TypeUint64))
 	id, ok := lluo.mutation.ID()
@@ -794,6 +809,7 @@ func (lluo *LogLoginUpdateOne) sqlSave(ctx context.Context) (_node *LogLogin, er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(lluo.modifiers...)
 	_node = &LogLogin{config: lluo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

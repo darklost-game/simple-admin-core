@@ -24,7 +24,6 @@ import (
 // UserQuery is the builder for querying User entities.
 type UserQuery struct {
 	config
-<<<<<<< HEAD
 	ctx               *QueryContext
 	order             []user.OrderOption
 	inters            []Interceptor
@@ -34,16 +33,7 @@ type UserQuery struct {
 	withRoles         *RoleQuery
 	withLogLogins     *LogLoginQuery
 	withLogOperations *LogOperationQuery
-=======
-	ctx             *QueryContext
-	order           []user.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.User
-	withDepartments *DepartmentQuery
-	withPositions   *PositionQuery
-	withRoles       *RoleQuery
-	modifiers       []func(*sql.Selector)
->>>>>>> effb2b519b019e425a77e70eba8d707b57b04e24
+	modifiers         []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)

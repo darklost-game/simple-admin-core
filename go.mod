@@ -1,20 +1,15 @@
 module github.com/suyuan32/simple-admin-core
 
-go 1.22.0
+go 1.22.1
 
 require (
 	entgo.io/ent v0.13.1
 	github.com/bsm/redislock v0.9.4
-<<<<<<< HEAD
-	github.com/casbin/casbin/v2 v2.87.1
-	github.com/duke-git/lancet/v2 v2.3.0
-	github.com/gofrs/uuid/v5 v5.1.0
-	github.com/google/uuid v1.6.0
-=======
 	github.com/casbin/casbin/v2 v2.89.0
+	github.com/casbin/redis-watcher/v2 v2.5.0
 	github.com/duke-git/lancet/v2 v2.3.1
 	github.com/gofrs/uuid/v5 v5.2.0
->>>>>>> effb2b519b019e425a77e70eba8d707b57b04e24
+	github.com/google/uuid v1.6.0
 	github.com/mojocn/base64Captcha v1.3.6
 	github.com/redis/go-redis/v9 v9.5.1
 	github.com/suyuan32/simple-admin-common v1.4.3
@@ -34,7 +29,6 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/casbin/ent-adapter v0.3.0 // indirect
 	github.com/casbin/govaluate v1.1.1 // indirect
-	github.com/casbin/redis-watcher/v2 v2.5.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/coreos/go-semver v0.3.1 // indirect

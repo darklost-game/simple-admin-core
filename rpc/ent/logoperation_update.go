@@ -20,8 +20,9 @@ import (
 // LogOperationUpdate is the builder for updating LogOperation entities.
 type LogOperationUpdate struct {
 	config
-	hooks    []Hook
-	mutation *LogOperationMutation
+	hooks     []Hook
+	mutation  *LogOperationMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the LogOperationUpdate builder.
@@ -253,6 +254,12 @@ func (lou *LogOperationUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (lou *LogOperationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *LogOperationUpdate {
+	lou.modifiers = append(lou.modifiers, modifiers...)
+	return lou
+}
+
 func (lou *LogOperationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := lou.check(); err != nil {
 		return n, err
@@ -330,6 +337,7 @@ func (lou *LogOperationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(lou.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, lou.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{logoperation.Label}
@@ -345,9 +353,10 @@ func (lou *LogOperationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // LogOperationUpdateOne is the builder for updating a single LogOperation entity.
 type LogOperationUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *LogOperationMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *LogOperationMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -586,6 +595,12 @@ func (louo *LogOperationUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (louo *LogOperationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *LogOperationUpdateOne {
+	louo.modifiers = append(louo.modifiers, modifiers...)
+	return louo
+}
+
 func (louo *LogOperationUpdateOne) sqlSave(ctx context.Context) (_node *LogOperation, err error) {
 	if err := louo.check(); err != nil {
 		return _node, err
@@ -680,6 +695,7 @@ func (louo *LogOperationUpdateOne) sqlSave(ctx context.Context) (_node *LogOpera
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	_spec.AddModifiers(louo.modifiers...)
 	_node = &LogOperation{config: louo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

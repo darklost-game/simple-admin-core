@@ -174,7 +174,6 @@ func (tu *TokenUpdate) defaults() {
 	}
 }
 
-<<<<<<< HEAD
 // check runs all checks and user-defined validators on the builder.
 func (tu *TokenUpdate) check() error {
 	if v, ok := tu.mutation.Token(); ok {
@@ -183,12 +182,12 @@ func (tu *TokenUpdate) check() error {
 		}
 	}
 	return nil
-=======
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (tu *TokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TokenUpdate {
 	tu.modifiers = append(tu.modifiers, modifiers...)
 	return tu
->>>>>>> effb2b519b019e425a77e70eba8d707b57b04e24
 }
 
 func (tu *TokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -409,7 +408,6 @@ func (tuo *TokenUpdateOne) defaults() {
 	}
 }
 
-<<<<<<< HEAD
 // check runs all checks and user-defined validators on the builder.
 func (tuo *TokenUpdateOne) check() error {
 	if v, ok := tuo.mutation.Token(); ok {
@@ -418,12 +416,12 @@ func (tuo *TokenUpdateOne) check() error {
 		}
 	}
 	return nil
-=======
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (tuo *TokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TokenUpdateOne {
 	tuo.modifiers = append(tuo.modifiers, modifiers...)
 	return tuo
->>>>>>> effb2b519b019e425a77e70eba8d707b57b04e24
 }
 
 func (tuo *TokenUpdateOne) sqlSave(ctx context.Context) (_node *Token, err error) {
