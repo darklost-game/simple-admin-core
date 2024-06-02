@@ -70,8 +70,9 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	msgBytes, err := msg.MarshalBinary()
 	logx.Must(err)
 	msgStr := string(msgBytes)
-	_, err = svc.LoadBanRoleData(msgStr)
+	banRoleData, err := svc.LoadBanRoleData(msgStr)
 	logx.Must(err)
+	svc.BanRoleConf.BanRoleData = banRoleData
 
 	svc.Authority = middleware.NewAuthorityMiddleware(cbn, rds, trans, svc.BanRoleConf).Handle
 	svc.Operation = middleware.NewOperationMiddleware(svc.CoreRpc).Handle
