@@ -4,7 +4,7 @@ import (
 	"github.com/suyuan32/simple-admin-common/config"
 	"github.com/suyuan32/simple-admin-common/i18n"
 	"github.com/suyuan32/simple-admin-common/utils/captcha"
-	casbin "github.com/suyuan32/simple-admin-core/api/internal/utils/ext"
+	casbin "github.com/suyuan32/simple-admin-core/api/utils/ext"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
 )

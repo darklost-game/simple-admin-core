@@ -7,11 +7,9 @@ import (
 	"github.com/suyuan32/simple-admin-common/utils/captcha"
 	i18n2 "github.com/suyuan32/simple-admin-core/api/internal/i18n"
 	"github.com/suyuan32/simple-admin-core/api/internal/middleware"
-	"github.com/suyuan32/simple-admin-core/api/internal/utils/banrole"
-	"github.com/suyuan32/simple-admin-core/api/internal/utils/banrolewatcher"
+	"github.com/suyuan32/simple-admin-core/api/utils/banrole"
 	"github.com/suyuan32/simple-admin-job/jobclient"
 	"github.com/suyuan32/simple-admin-message-center/mcmsclient"
-	"github.com/zeromicro/go-zero/core/logx"
 
 	"github.com/suyuan32/simple-admin-core/api/internal/config"
 	"github.com/suyuan32/simple-admin-core/rpc/coreclient"
@@ -63,16 +61,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 	//初始化管理平台banrole
 	svc.BanRoleConf = banrole.NewBanRoleConf(c.RedisConf, "/ban_role/core", svc.LoadBanRoleData)
-	msg := &banrolewatcher.MSG{
-		Method: banrolewatcher.Update,
-		ID:     svc.BanRoleConf.Watcher.GetWatcherOptions().LocalID,
-	}
-	msgBytes, err := msg.MarshalBinary()
-	logx.Must(err)
-	msgStr := string(msgBytes)
-	banRoleData, err := svc.LoadBanRoleData(msgStr)
-	logx.Must(err)
-	svc.BanRoleConf.BanRoleData = banRoleData
 
 	svc.Authority = middleware.NewAuthorityMiddleware(cbn, rds, trans, svc.BanRoleConf).Handle
 	svc.Operation = middleware.NewOperationMiddleware(svc.CoreRpc).Handle

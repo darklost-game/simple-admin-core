@@ -1,7 +1,7 @@
 package banrole
 
 import (
-	"github.com/suyuan32/simple-admin-core/api/internal/utils/banrolewatcher"
+	"github.com/suyuan32/simple-admin-core/api/utils/banrolewatcher"
 
 	"github.com/redis/go-redis/v9"
 	"github.com/suyuan32/simple-admin-common/config"
@@ -48,6 +48,7 @@ func NewBanRoleConf(redisConf config.RedisConf, channel string, f BanRoleUpdateC
 		},
 	})
 	logx.Must(err)
+	watcher.Update()
 	l.Watcher = watcher
 
 	return l
