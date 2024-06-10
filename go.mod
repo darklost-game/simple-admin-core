@@ -6,6 +6,7 @@ require (
 	entgo.io/ent v0.13.1
 	github.com/bsm/redislock v0.9.4
 	github.com/casbin/casbin/v2 v2.90.0
+	github.com/casbin/redis-watcher/v2 v2.5.0
 	github.com/duke-git/lancet/v2 v2.3.1
 	github.com/gofrs/uuid/v5 v5.2.0
 	github.com/google/uuid v1.6.0
@@ -55,7 +56,6 @@ require (
 	github.com/google/gnostic-models v0.6.8 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.20.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.20.1 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
